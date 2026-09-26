@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - CampusFix</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Admin Login</h1>
+
+        <p>Login to manage campus complaints</p>
+
+        <form>
+
+            <input type="text" id="username" placeholder="Admin Username" required>
+
+<input type="password" id="password" placeholder="Admin Password" required>
+
+            <button type="submit">Admin Login</button>
+
+        </form>
+
+        <p>
+            <a href="index.html">Back to Home</a>
+        </p>
+
+    </div>
+<script>
+    const form = document.querySelector("form");
+
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const username = document.querySelector("#username").value;
+        const password = document.querySelector("#password").value;
+
+        const response = await fetch("http://localhost:3000/admin-login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(result.message);
+            window.location.href = "admin-dashboard.html";
+        } else {
+            alert(result.message);
+        }
+    });
+</script>
+</body>
+
+</html>

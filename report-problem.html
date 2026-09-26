@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report Problem - CampusFix</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Report a Problem</h1>
+
+        <p>Tell us about the problem you found on campus.</p>
+
+        <form>
+
+           <input
+    type="text"
+    id="title"
+    placeholder="Problem Title"
+    required
+>
+
+            <select id="category" required>
+    <option value="">Select Category</option>
+    <option>Electrical</option>
+    <option>Water</option>
+    <option>Classroom</option>
+    <option>Wi-Fi</option>
+    <option>Cleanliness</option>
+    <option>Lab Equipment</option>
+    <option>Other</option>
+</select>
+          <input
+    type="text"
+    id="location"
+    placeholder="Location (Building / Room No.)"
+    required
+>
+
+           <textarea
+    id="description"
+    placeholder="Describe the problem..."
+    rows="5"
+    required
+></textarea>
+         <label for="photo">Upload Problem Photo (Optional)</label>
+
+<input type="file" id="photo" accept="image/*">
+        <select id="priority" required>
+    <option value="" selected disabled>Select Priority</option>
+    <option>Low</option>
+    <option>Medium</option>
+    <option>High</option>
+</select>
+
+            <button type="submit">Submit Complaint</button>
+
+        </form>
+
+        <p>
+            <a href="student-dashboard.html">Back to Dashboard</a>
+        </p>
+
+    </div>
+<script>
+    const form = document.querySelector("form");
+
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+
+        formData.append("title", document.querySelector("#title").value);
+        formData.append("category", document.querySelector("#category").value);
+        formData.append("location", document.querySelector("#location").value);
+        formData.append("description", document.querySelector("#description").value);
+        formData.append("priority", document.querySelector("#priority").value);
+        formData.append("studentId", localStorage.getItem("studentId"));
+
+        const photo = document.querySelector("#photo").files[0];
+
+        if (photo) {
+            formData.append("photo", photo);
+        }
+
+        const response = await fetch("http://localhost:3000/report", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        alert(result.message + "\nYour Complaint ID: " + result.complaintId);
+    });
+</script>
+</body>
+
+</html>

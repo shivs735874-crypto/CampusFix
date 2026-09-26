@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Registration - CampusFix</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Registration</h1>
+
+        <p>Create your CampusFix account</p>
+
+        <form>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Full Name"
+                required
+            >
+
+            <input
+                type="text"
+                id="studentId"
+                placeholder="Student ID / Roll No."
+                required
+            >
+
+            <input
+                type="email"
+                id="email"
+                placeholder="College Email"
+                required
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required
+            >
+
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm Password"
+                required
+            >
+
+            <button type="submit">
+                Create Account
+            </button>
+
+        </form>
+
+        <p>
+            Already have an account?
+            <a href="login.html">Student Login</a>
+        </p>
+
+        <p>
+            <a href="index.html">Back to Home</a>
+        </p>
+
+    </div>
+
+
+    <script>
+
+        const form = document.querySelector("form");
+
+        form.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const name = document.querySelector("#name").value;
+            const studentId = document.querySelector("#studentId").value;
+            const email = document.querySelector("#email").value;
+            const password = document.querySelector("#password").value;
+            const confirmPassword = document.querySelector("#confirmPassword").value;
+
+
+            if (password !== confirmPassword) {
+
+                alert("Passwords do not match!");
+
+                return;
+
+            }
+
+
+            const response = await fetch(
+                "http://localhost:3000/register",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        name,
+                        studentId,
+                        email,
+                        password
+                    })
+                }
+            );
+
+
+            const result = await response.json();
+
+
+            alert(result.message);
+
+
+            if (result.success) {
+
+                window.location.href = "login.html";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

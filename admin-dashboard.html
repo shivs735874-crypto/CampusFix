@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Dashboard - CampusFix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Admin Dashboard</h1>
+        <p>Manage Student Complaints</p>
+
+        <!-- Statistics -->
+        <div class="stats">
+
+            <div>
+                <h2 id="totalCount">0</h2>
+                <p>Total Complaints</p>
+            </div>
+
+            <div>
+                <h2 id="pendingCount">0</h2>
+                <p>Pending</p>
+            </div>
+
+            <div>
+                <h2 id="progressCount">0</h2>
+                <p>In Progress</p>
+            </div>
+
+            <div>
+                <h2 id="resolvedCount">0</h2>
+                <p>Resolved</p>
+            </div>
+
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+
+            <button onclick="filterComplaints('All')">
+                All
+            </button>
+
+            <button onclick="filterComplaints('Pending')">
+                Pending
+            </button>
+
+            <button onclick="filterComplaints('In Progress')">
+                In Progress
+            </button>
+
+            <button onclick="filterComplaints('Resolved')">
+                Resolved
+            </button>
+
+        </div>
+
+        <!-- Complaints -->
+        <div id="complaints">
+            <p>Loading complaints...</p>
+        </div>
+
+        <br>
+
+        <button onclick="window.location.href='index.html'">
+            Back to Home
+        </button>
+
+    </div>
+
+
+    <script>
+
+        async function loadComplaints() {
+
+            const response = await fetch("http://localhost:3000/complaints");
+
+            const complaints = await response.json();
+
+            console.log("Complaints:", complaints);
+
+
+            // Calculate statistics
+
+            const total = complaints.length;
+
+            const pending = complaints.filter(
+                complaint => complaint.status === "Pending"
+            ).length;
+
+            const inProgress = complaints.filter(
+                complaint => complaint.status === "In Progress"
+            ).length;
+
+            const resolved = complaints.filter(
+                complaint => complaint.status === "Resolved"
+            ).length;
+
+
+            // Show statistics
+
+            document.querySelector("#totalCount").textContent = total;
+
+            document.querySelector("#pendingCount").textContent = pending;
+
+            document.querySelector("#progressCount").textContent = inProgress;
+
+            document.querySelector("#resolvedCount").textContent = resolved;
+
+
+            // Show complaints
+
+            const container = document.querySelector("#complaints");
+
+            container.innerHTML = "";
+
+
+            complaints.forEach(complaint => {
+
+                const card = document.createElement("div");
+
+                // Store complaint status for filtering
+
+                card.setAttribute("data-status", complaint.status);
+
+
+              card.innerHTML = `
+
+    <h3>${complaint.title}</h3>
+
+    <p>
+        <b>Complaint ID:</b>
+        ${complaint.complaintId || "Old Complaint"}
+    </p>
+
+    <p>
+        <b>Category:</b>
+        ${complaint.category}
+    </p>
+
+    <p>
+        <b>Location:</b>
+        ${complaint.location}
+    </p>
+
+    <p>
+        <b>Description:</b>
+        ${complaint.description}
+    </p>
+
+    <p>
+        <b>Priority:</b>
+        ${complaint.priority}
+    </p>
+
+    ${
+        complaint.photo
+        ? `<p>
+             <b>Problem Photo:</b><br>
+             <img src="http://localhost:3000/${complaint.photo}"
+                  width="250"
+                  style="margin-top:10px; border-radius:10px;">
+           </p>`
+        : ""
+    }
+
+    <p>
+        <b>Status:</b>
+
+        <select onchange="updateStatus('${complaint._id}', this.value)">
+
+            <option value="Pending"
+                ${complaint.status === "Pending" ? "selected" : ""}>
+                Pending
+            </option>
+
+            <option value="In Progress"
+                ${complaint.status === "In Progress" ? "selected" : ""}>
+                In Progress
+            </option>
+
+            <option value="Resolved"
+                ${complaint.status === "Resolved" ? "selected" : ""}>
+                Resolved
+            </option>
+
+        </select>
+
+    </p>
+
+    <hr>
+
+`;
+
+                container.appendChild(card);
+
+            });
+
+        }
+
+
+        // Update complaint status
+
+        async function updateStatus(id, status) {
+
+            console.log("Update function called:", id, status);
+
+            try {
+
+                const response = await fetch(
+                    `http://localhost:3000/complaints/${id}`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            status: status
+                        })
+                    }
+                );
+
+
+                const result = await response.json();
+
+                alert(result.message);
+
+                // Reload dashboard so statistics update
+
+                loadComplaints();
+
+            }
+
+            catch (error) {
+
+                console.log("ERROR:", error);
+
+                alert(error.message);
+
+            }
+
+        }
+
+
+        // Filter complaints
+
+        function filterComplaints(status) {
+
+    const cards = document.querySelectorAll("#complaints > div");
+
+    cards.forEach(card => {
+
+        const cardStatus = card.getAttribute("data-status");
+
+        if (status === "All" || cardStatus === status) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+
+    });
+
+}
+
+        // Load complaints when page opens
+
+        loadComplaints();
+
+    </script>
+
+</body>
+
+</html>

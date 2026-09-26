@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Login - CampusFix</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Login</h1>
+
+        <p>Login to your CampusFix account</p>
+
+        <form id="loginForm">
+
+            <input
+                type="text"
+                id="studentId"
+                placeholder="Student ID / Roll No."
+                required
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required
+            >
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <p>
+            Don't have an account?
+            <a href="register.html">Create Account</a>
+        </p>
+
+        <p>
+            <a href="index.html">Back to Home</a>
+        </p>
+
+    </div>
+
+
+    <script>
+
+        const form = document.querySelector("#loginForm");
+
+        form.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const studentId =
+                document.querySelector("#studentId").value;
+
+            const password =
+                document.querySelector("#password").value;
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:3000/login",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            studentId: studentId,
+                            password: password
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                alert(result.message);
+
+                if (result.success) {
+
+                    localStorage.setItem(
+                        "studentId",
+                        studentId
+                    );
+
+                    window.location.href =
+                        "student-dashboard.html";
+
+                }
+
+            } catch (error) {
+
+                console.log("Login Error:", error);
+
+                alert("Cannot connect to server!");
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

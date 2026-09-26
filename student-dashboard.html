@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard - CampusFix</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .stats div {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .stats div:hover {
+            transform: translateY(-5px);
+        }
+
+        .complaint-card {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            text-align: left;
+        }
+
+        .complaint-card h3 {
+            margin-top: 0;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .priority {
+            font-weight: bold;
+        }
+
+        #filterTitle {
+            margin-top: 30px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Dashboard</h1>
+
+        <h2>Welcome to CampusFix 👋</h2>
+
+        <p>Track and manage your college complaints.</p>
+
+
+        <div class="dashboard-buttons">
+
+            <button onclick="showComplaints('All')">
+                My Complaints
+            </button>
+
+            <a href="report-problem.html">
+                <button>Report New Problem</button>
+            </a>
+
+        </div>
+
+
+        <!-- Statistics -->
+
+        <div class="stats">
+
+            <div onclick="showComplaints('All')">
+                <h2 id="totalCount">0</h2>
+                <p>Total Complaints</p>
+            </div>
+
+            <div onclick="showComplaints('Pending')">
+                <h2 id="pendingCount">0</h2>
+                <p>Pending</p>
+            </div>
+
+            <div onclick="showComplaints('In Progress')">
+                <h2 id="progressCount">0</h2>
+                <p>In Progress</p>
+            </div>
+
+            <div onclick="showComplaints('Resolved')">
+                <h2 id="resolvedCount">0</h2>
+                <p>Resolved</p>
+            </div>
+
+        </div>
+
+
+        <h2 id="filterTitle">My Complaints</h2>
+
+        <div id="complaintsList"></div>
+
+
+        <p>
+            <a href="index.html">Back to Home</a>
+        </p>
+
+    </div>
+
+
+    <script>
+
+        let myComplaints = [];
+
+
+        async function loadStudentComplaints() {
+
+            try {
+
+                const studentId = localStorage.getItem("studentId");
+
+                if (!studentId) {
+
+                    alert("Please login first!");
+
+                    window.location.href = "login.html";
+
+                    return;
+
+                }
+
+
+                const response = await fetch(
+                    "http://localhost:3000/complaints"
+                );
+
+                const complaints = await response.json();
+
+
+                // Only logged-in student's complaints
+
+                myComplaints = complaints.filter(
+                    complaint => complaint.studentId === studentId
+                );
+
+
+                // Calculate statistics
+
+                const total = myComplaints.length;
+
+                const pending = myComplaints.filter(
+                    complaint => complaint.status === "Pending"
+                ).length;
+
+                const progress = myComplaints.filter(
+                    complaint => complaint.status === "In Progress"
+                ).length;
+
+                const resolved = myComplaints.filter(
+                    complaint => complaint.status === "Resolved"
+                ).length;
+
+
+                // Display statistics
+
+                document.getElementById("totalCount").textContent = total;
+
+                document.getElementById("pendingCount").textContent = pending;
+
+                document.getElementById("progressCount").textContent = progress;
+
+                document.getElementById("resolvedCount").textContent = resolved;
+
+
+                // Show all complaints initially
+
+                displayComplaints(myComplaints, "My Complaints");
+
+
+            } catch (error) {
+
+                console.log(
+                    "Error loading complaints:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        function displayComplaints(complaints, title) {
+
+            const list =
+                document.getElementById("complaintsList");
+
+            const filterTitle =
+                document.getElementById("filterTitle");
+
+
+            filterTitle.textContent = title;
+
+            list.innerHTML = "";
+
+
+            if (complaints.length === 0) {
+
+                list.innerHTML =
+                    "<p>No complaints found.</p>";
+
+                return;
+
+            }
+
+
+            complaints.forEach(complaint => {
+
+                const card =
+                    document.createElement("div");
+
+
+                card.className = "complaint-card";
+
+
+                card.innerHTML = `
+
+                    <h3>${complaint.title}</h3>
+
+                    <p>
+                        <b>Complaint ID:</b>
+                        ${complaint.complaintId || "ID not available"}
+                    </p>
+
+                    <p>
+                        <b>Category:</b>
+                        ${complaint.category}
+                    </p>
+
+                    <p>
+                        <b>Location:</b>
+                        ${complaint.location}
+                    </p>
+
+                    <p class="priority">
+                        <b>Priority:</b>
+                        ${complaint.priority}
+                    </p>
+
+                    <p class="status">
+                        <b>Status:</b>
+                        ${complaint.status}
+                    </p>
+
+                `;
+
+
+                list.appendChild(card);
+
+            });
+
+        }
+
+
+        function showComplaints(status) {
+
+            let filteredComplaints;
+
+
+            if (status === "All") {
+
+                filteredComplaints =
+                    myComplaints;
+
+            } else {
+
+                filteredComplaints =
+                    myComplaints.filter(
+                        complaint =>
+                            complaint.status === status
+                    );
+
+            }
+
+
+            displayComplaints(
+                filteredComplaints,
+                status === "All"
+                    ? "My Complaints"
+                    : status + " Complaints"
+            );
+
+
+            document
+                .getElementById("complaintsList")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+        }
+
+
+        // Load complaints when dashboard opens
+
+        loadStudentComplaints();
+
+    </script>
+
+</body>
+
+</html>
