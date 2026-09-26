@@ -128,71 +128,110 @@
                 card.setAttribute("data-status", complaint.status);
 
 
-              card.innerHTML = `
+            card.innerHTML = `
 
-    <h3>${complaint.title}</h3>
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        gap:25px;
+    ">
 
-    <p>
-        <b>Complaint ID:</b>
-        ${complaint.complaintId || "Old Complaint"}
-    </p>
+        <div style="flex:1;">
 
-    <p>
-        <b>Category:</b>
-        ${complaint.category}
-    </p>
+            <h3 style="
+                color:#c4b5fd;
+                font-size:22px;
+                margin-bottom:15px;
+            ">
+                ${complaint.title}
+            </h3>
 
-    <p>
-        <b>Location:</b>
-        ${complaint.location}
-    </p>
+            <p>
+                <b>Complaint ID:</b>
+                ${complaint.complaintId || "Old Complaint"}
+            </p>
 
-    <p>
-        <b>Description:</b>
-        ${complaint.description}
-    </p>
+            <p>
+                <b>Category:</b>
+                ${complaint.category}
+            </p>
 
-    <p>
-        <b>Priority:</b>
-        ${complaint.priority}
-    </p>
+            <p>
+                <b>Location:</b>
+                ${complaint.location}
+            </p>
 
-    ${
-        complaint.photo
-        ? `<p>
-             <b>Problem Photo:</b><br>
-             <img src="/${complaint.photo}"
-                  width="250"
-                  style="margin-top:10px; border-radius:10px;">
-           </p>`
-        : ""
-    }
+            <p>
+                <b>Description:</b>
+                ${complaint.description}
+            </p>
 
-    <p>
-        <b>Status:</b>
+            <p>
+                <b>Priority:</b>
+                ${complaint.priority}
+            </p>
 
-        <select onchange="updateStatus('${complaint._id}', this.value)">
+            <p>
+                <b>Status:</b>
 
-            <option value="Pending"
-                ${complaint.status === "Pending" ? "selected" : ""}>
-                Pending
-            </option>
+                <select onchange="updateStatus('${complaint._id}', this.value)">
 
-            <option value="In Progress"
-                ${complaint.status === "In Progress" ? "selected" : ""}>
-                In Progress
-            </option>
+                    <option value="Pending"
+                        ${complaint.status === "Pending" ? "selected" : ""}>
+                        Pending
+                    </option>
 
-            <option value="Resolved"
-                ${complaint.status === "Resolved" ? "selected" : ""}>
-                Resolved
-            </option>
+                    <option value="In Progress"
+                        ${complaint.status === "In Progress" ? "selected" : ""}>
+                        In Progress
+                    </option>
 
-        </select>
+                    <option value="Resolved"
+                        ${complaint.status === "Resolved" ? "selected" : ""}>
+                        Resolved
+                    </option>
 
-    </p>
+                </select>
 
-    <hr>
+            </p>
+
+        </div>
+
+
+        ${
+            complaint.photo
+            ? `
+                <div style="
+                    width:170px;
+                    flex-shrink:0;
+                    text-align:center;
+                ">
+
+                    <p style="
+                        margin-bottom:8px;
+                        color:#c4b5fd;
+                    ">
+                        <b>Problem Photo</b>
+                    </p>
+
+                    <img
+                        src="/${complaint.photo}"
+                        style="
+                            width:160px;
+                            height:120px;
+                            object-fit:cover;
+                            border-radius:12px;
+                            border:2px solid rgba(196,181,253,0.5);
+                        "
+                    >
+
+                </div>
+            `
+            : ""
+        }
+
+    </div>
 
 `;
 
