@@ -18,8 +18,10 @@ mongoose.connect(process.env.MONGODB_URI)
         console.log("MongoDB Connection Error:", error);
     });
 
+app.use(express.static(__dirname));
+
 app.get("/", (req, res) => {
-    res.send("CampusFix Backend is Running!");
+    res.sendFile(__dirname + "/index.html");
 });
 app.post("/register", async (req, res) => {
 
