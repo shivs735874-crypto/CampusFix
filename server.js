@@ -117,7 +117,7 @@ app.post("/login", async (req, res) => {
 app.post("/admin-login", (req, res) => {
     const { username, password } = req.body;
 
-    if (username === "admin" && password === "admin123") {
+  if (username === "admin" && password === "shiv0000") {
         res.json({
             success: true,
             message: "Admin login successful!"
