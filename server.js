@@ -73,17 +73,18 @@ app.post("/login", async (req, res) => {
 
     try {
 
-        const { studentId, password } = req.body;
+        const { studentId, name, password } = req.body;
 
         const student = await Student.findOne({
-            studentId: studentId
+            studentId: studentId,
+            name: name
         });
 
         if (!student) {
 
             return res.json({
                 success: false,
-                message: "Student ID not found!"
+                message: "Roll Number or Name is incorrect!"
             });
 
         }
@@ -99,7 +100,8 @@ app.post("/login", async (req, res) => {
 
         res.json({
             success: true,
-            message: "Login successful!"
+            message: "Login successful!",
+            name: student.name
         });
 
     } catch (error) {

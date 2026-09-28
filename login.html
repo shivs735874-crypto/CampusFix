@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Login - CampusFix</title>
+    <title>Student Login - CampusFix 2.0</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -14,16 +14,23 @@
 
     <div class="container">
 
-        <h1>Student Login</h1>
+        <h1>CampusFix 2.0</h1>
 
-        <p>Login to your CampusFix account</p>
+        <p>Student Login</p>
 
         <form id="loginForm">
 
             <input
                 type="text"
                 id="studentId"
-                placeholder="Student ID / Roll No."
+                placeholder="Roll Number"
+                required
+            >
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Full Name"
                 required
             >
 
@@ -41,11 +48,6 @@
         </form>
 
         <p>
-            Don't have an account?
-            <a href="register.html">Create Account</a>
-        </p>
-
-        <p>
             <a href="index.html">Back to Home</a>
         </p>
 
@@ -61,7 +63,10 @@
             event.preventDefault();
 
             const studentId =
-                document.querySelector("#studentId").value;
+                document.querySelector("#studentId").value.trim();
+
+            const name =
+                document.querySelector("#name").value.trim();
 
             const password =
                 document.querySelector("#password").value;
@@ -79,6 +84,7 @@
 
                         body: JSON.stringify({
                             studentId: studentId,
+                            name: name,
                             password: password
                         })
                     }
@@ -93,6 +99,11 @@
                     localStorage.setItem(
                         "studentId",
                         studentId
+                    );
+
+                    localStorage.setItem(
+                        "studentName",
+                        result.name
                     );
 
                     window.location.href =

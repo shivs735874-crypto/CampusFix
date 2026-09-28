@@ -181,3 +181,440 @@ border: none;
 font-size: 14px;
 cursor: pointer;
 }
+/* ================================
+   ADMIN DASHBOARD UI
+================================ */
+
+/* Stats Cards */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 30px 0;
+}
+
+.stats > div {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    padding: 22px;
+    text-align: center;
+    transition: 0.25s;
+}
+
+.stats > div:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.stats h2 {
+    font-size: 30px;
+    margin-bottom: 6px;
+}
+
+.stats p {
+    margin: 0;
+    color: #dbeafe;
+    font-size: 14px;
+}
+
+
+/* Filter Buttons */
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 25px 0;
+}
+
+.filters button {
+    padding: 10px 18px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.10);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.filters button:hover {
+    background: rgba(196,181,253,0.25);
+    transform: translateY(-2px);
+}
+
+
+/* Complaint Cards */
+#complaints > div {
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: 0.25s;
+}
+
+#complaints > div:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.13);
+}
+
+#complaints h3 {
+    color: #c4b5fd !important;
+    font-size: 22px !important;
+}
+
+#complaints p {
+    color: #e2e8f0;
+    line-height: 1.5;
+}
+
+
+/* Status Select */
+#complaints select {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    background: white;
+    color: #1e293b;
+}
+
+
+/* Complaint Photo */
+#complaints img {
+    transition: 0.25s;
+}
+
+#complaints img:hover {
+    transform: scale(1.04);
+}
+
+
+/* Mobile Responsive */
+@media (max-width: 700px) {
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .filters {
+        gap: 8px;
+    }
+
+    .filters button {
+        padding: 9px 12px;
+    }
+}
+
+@media (max-width: 450px) {
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}
+/* =========================================
+   CAMPUSFIX ADMIN - NEW COLOR SYSTEM
+========================================= */
+
+/* Stats */
+.stats > div:nth-child(1) {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border: none;
+}
+
+.stats > div:nth-child(2) {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border: none;
+}
+
+.stats > div:nth-child(3) {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    border: none;
+}
+
+.stats > div:nth-child(4) {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border: none;
+}
+
+.stats > div h2,
+.stats > div p {
+    color: white;
+}
+
+
+/* Filter buttons */
+.filters button {
+    background: #1e293b;
+    border: 1px solid #475569;
+    color: white;
+    font-weight: 600;
+}
+
+.filters button:nth-child(1):hover {
+    background: #2563eb;
+}
+
+.filters button:nth-child(2):hover {
+    background: #f59e0b;
+}
+
+.filters button:nth-child(3):hover {
+    background: #f97316;
+}
+
+.filters button:nth-child(4):hover {
+    background: #16a34a;
+}
+
+
+/* Complaint cards */
+#complaints > div {
+    background: #172033;
+    border: 1px solid #334155;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+#complaints > div:hover {
+    background: #1e293b;
+}
+
+
+/* Complaint title */
+#complaints h3 {
+    color: #93c5fd !important;
+}
+
+
+/* Text */
+#complaints p {
+    color: #cbd5e1;
+}
+
+
+/* Status dropdown */
+#complaints select {
+    background: #f8fafc;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+
+/* Back button */
+.container > button:last-child {
+    background: #334155;
+    color: white;
+    border: 1px solid #64748b;
+}
+
+.container > button:last-child:hover {
+    background: #475569;
+}
+/* ================================
+   WEEKLY ANALYTICS
+================================ */
+
+.weekly-analytics {
+    margin: 30px 0;
+    padding: 25px;
+    background: #172033;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    text-align: left;
+}
+
+.weekly-analytics h2 {
+    margin-bottom: 5px;
+    color: #93c5fd;
+}
+
+.analytics-subtitle {
+    color: #94a3b8;
+    margin-bottom: 22px;
+}
+
+.analytics-item {
+    margin-bottom: 18px;
+}
+
+.analytics-item > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+}
+
+.analytics-item b {
+    color: white;
+}
+
+.analytics-item span {
+    color: #cbd5e1;
+}
+
+.analytics-bar {
+    height: 9px;
+    background: #334155;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.analytics-bar div {
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #8b5cf6);
+    border-radius: 10px;
+}
+/* ================================
+   WEEKLY ANALYTICS
+================================ */
+
+.weekly-analytics {
+    margin: 30px 0;
+    padding: 25px;
+    background: #172033;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    text-align: left;
+}
+
+.weekly-analytics h2 {
+    margin-bottom: 6px;
+    color: #93c5fd;
+}
+
+.analytics-subtitle {
+    color: #94a3b8;
+    margin-bottom: 22px;
+}
+
+.analytics-item {
+    margin-bottom: 18px;
+}
+
+.analytics-item > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+}
+
+.analytics-item b {
+    color: white;
+}
+
+.analytics-item span {
+    color: #cbd5e1;
+}
+
+.analytics-bar {
+    height: 9px;
+    background: #334155;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.analytics-bar div {
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #8b5cf6);
+    border-radius: 10px;
+}
+/* Weekly Analyzer Button */
+
+.weekly-analyzer-box {
+    margin-top: 25px;
+    padding: 18px 22px;
+
+    background: #172033;
+    border: 1px solid #334155;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.weekly-analyzer-box:hover {
+    background: #1e293b;
+    transform: translateY(-2px);
+}
+
+.weekly-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #2563eb;
+
+    border-radius: 12px;
+
+    font-size: 24px;
+}
+
+.weekly-analyzer-box h3 {
+    margin: 0;
+
+    color: #93c5fd;
+
+    font-size: 20px;
+}
+
+.weekly-analyzer-box p {
+    margin: 5px 0 0;
+
+    color: #cbd5e1;
+
+    font-size: 14px;
+}
+
+
+/* Weekly Analytics */
+
+.weekly-analytics {
+    margin-top: 20px;
+
+    padding: 25px;
+
+    background: #172033;
+
+    border: 1px solid #334155;
+
+    border-radius: 16px;
+}
+
+.weekly-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.close-weekly {
+    background: #334155;
+
+    color: white;
+
+    border: 1px solid #64748b;
+
+    border-radius: 8px;
+
+    padding: 8px 12px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+}
+
+.close-weekly:hover {
+    background: #475569;
+}

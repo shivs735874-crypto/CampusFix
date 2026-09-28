@@ -42,11 +42,13 @@ const complaintSchema = new mongoose.Schema({
     type: String,
     required: false
 },
-    status: {
+        status: {
         type: String,
         default: "Pending"
     }
 
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model("Complaint", complaintSchema);
