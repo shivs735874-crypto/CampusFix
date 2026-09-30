@@ -3,12 +3,40 @@ require("dotenv").config();
 const express = require("express");
 const multer = require("multer");
 const mongoose = require("mongoose");
+
 const Complaint = require("./models/Complaint");
 const Student = require("./models/Student");
 const MonthlyAnalytics = require("./models/MonthlyAnalytics");
+
+const cloudinary = require("cloudinary").v2;
+
 const app = express();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 app.use("/uploads", express.static("uploads"));
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ storage: multer.memoryStorage() });
+function uploadToCloudinary(fileBuffer) {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: "campusfix"
+            },
+            (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            }
+        );
+
+        stream.end(fileBuffer);
+    });
+}
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI)
@@ -361,7 +389,14 @@ app.post("/report", upload.single("photo"), async (req, res) => {
         // Generate unique Complaint ID
         const complaintId = "CF-" + Date.now();
 
-        const newComplaint = new Complaint({
+      let photoUrl = null;
+
+if (req.file) {
+    const result = await uploadToCloudinary(req.file.buffer);
+    photoUrl = result.secure_url;
+}
+
+const newComplaint = new Complaint({
     complaintId,
     title,
     category,
@@ -369,7 +404,7 @@ app.post("/report", upload.single("photo"), async (req, res) => {
     description,
     priority,
     studentId,
-photo: req.file ? `/uploads/${req.file.filename}` : null
+    photo: photoUrl
 });
 
         await newComplaint.save();
