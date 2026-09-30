@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Complaints - CampusFix 2.0</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+
+        /* FIXED HEADER */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 25px;
+
+            background: #111827;
+            border-bottom: 1px solid #334155;
+
+            z-index: 9999;
+        }
+
+        .top-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #93c5fd;
+        }
+
+        .close-btn {
+            width: 42px;
+            height: 42px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #334155;
+            color: white;
+
+            font-size: 23px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background: #475569;
+        }
+
+        /* MAIN */
+        .page {
+            max-width: 1100px;
+            margin: auto;
+
+            padding: 105px 20px 40px;
+        }
+
+        .page-info {
+            margin-bottom: 25px;
+        }
+
+        .page-info h2 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .page-info p {
+            margin: 0;
+            color: #94a3b8;
+        }
+
+        /* COMPLAINT CARD */
+        .complaint-card {
+            width: 100%;
+
+            margin-bottom: 18px;
+            padding: 22px;
+
+            background: #172033;
+            border: 1px solid #334155;
+
+            border-radius: 16px;
+
+            box-shadow: 0 10px 30px rgba(0,0,0,0.20);
+        }
+
+        .complaint-card:hover {
+            background: #1e293b;
+        }
+
+        .complaint-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: 25px;
+        }
+
+        .complaint-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .complaint-info h3 {
+            margin: 0 0 15px;
+
+            color: #93c5fd;
+            font-size: 22px;
+        }
+
+        .complaint-info p {
+            margin: 8px 0;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .complaint-info b {
+            color: #f8fafc;
+        }
+
+        /* COMPLAINT ID */
+        .complaint-id {
+            display: inline-block;
+
+            margin-bottom: 12px;
+            padding: 7px 11px;
+
+            border-radius: 8px;
+
+            background: rgba(139,92,246,0.20);
+            color: #c4b5fd;
+
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* PHOTO */
+        .photo-box {
+            width: 170px;
+            flex-shrink: 0;
+
+            text-align: center;
+        }
+
+        .photo-box p {
+            margin: 0 0 8px;
+            color: #c4b5fd;
+        }
+
+        .photo-box img {
+            width: 160px;
+            height: 120px;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+            border: 2px solid rgba(196,181,253,0.5);
+
+            cursor: pointer;
+        }
+
+        /* STATUS */
+        .status-badge {
+            display: inline-block;
+
+            padding: 7px 12px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.45);
+            color: #fbbf24;
+        }
+
+        .status-progress {
+            background: rgba(59, 130, 246, 0.45);
+            color: #93c5fd;
+        }
+
+        .status-resolved {
+            background: rgba(34, 197, 94, 0.45);
+            color: #86efac;
+        }
+
+        /* STATUS SELECT */
+        .status-select {
+            margin-top: 8px;
+
+            padding: 8px 12px;
+
+            border-radius: 8px;
+            border: none;
+
+            background: #f8fafc;
+            color: #0f172a;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        /* EMPTY / ERROR */
+        .message {
+            padding: 25px;
+
+            text-align: center;
+
+            background: #172033;
+            border: 1px solid #334155;
+
+            border-radius: 14px;
+
+            color: #cbd5e1;
+        }
+
+        /* PHOTO MODAL */
+        .photo-modal {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+
+            background: rgba(0,0,0,0.85);
+
+            z-index: 10000;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .photo-modal img {
+            max-width: 90%;
+            max-height: 85vh;
+
+            border-radius: 14px;
+        }
+
+        .modal-close {
+            position: fixed;
+
+            top: 20px;
+            right: 25px;
+
+            width: 45px;
+            height: 45px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #334155;
+            color: white;
+
+            font-size: 24px;
+
+            cursor: pointer;
+        }
+
+        /* MOBILE */
+        @media (max-width: 700px) {
+
+            .top-header {
+                padding: 0 15px;
+            }
+
+            .top-header h1 {
+                font-size: 19px;
+            }
+
+            .page {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .complaint-content {
+                flex-direction: column;
+            }
+
+            .photo-box {
+                width: 100%;
+                text-align: left;
+            }
+
+            .photo-box img {
+                width: 180px;
+                height: 135px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- FIXED HEADER -->
+    <div class="top-header">
+
+        <h1 id="pageTitle">
+            📋 Complaints
+        </h1>
+
+        <button
+            class="close-btn"
+            onclick="window.location.href='admin-dashboard.html'"
+            title="Close"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <!-- PAGE -->
+    <div class="page">
+
+        <div class="page-info">
+
+            <h2 id="heading">
+                Complaints
+            </h2>
+
+            <p id="countText">
+                Loading complaints...
+            </p>
+
+        </div>
+
+
+        <div id="complaintsContainer"></div>
+
+    </div>
+
+
+    <!-- PHOTO MODAL -->
+    <div
+        class="photo-modal"
+        id="photoModal"
+        onclick="closePhoto()"
+    >
+
+        <button
+            class="modal-close"
+            onclick="closePhoto()"
+        >
+            ✕
+        </button>
+
+        <img
+            id="modalImage"
+            src=""
+            alt="Complaint Photo"
+            onclick="event.stopPropagation()"
+        >
+
+    </div>
+
+
+    <script>
+
+        /* GET STATUS FROM URL */
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const selectedStatus =
+            params.get("status") || "All";
+
+
+        /* PAGE TITLE */
+
+        const pageTitle =
+            document.getElementById(
+                "pageTitle"
+            );
+
+        const heading =
+            document.getElementById(
+                "heading"
+            );
+
+
+        if (selectedStatus === "Pending") {
+
+            pageTitle.textContent =
+                "🟡 Pending Complaints";
+
+            heading.textContent =
+                "🟡 Pending Complaints";
+
+        }
+
+        else if (
+            selectedStatus === "In Progress"
+        ) {
+
+            pageTitle.textContent =
+                "🔵 In Progress Complaints";
+
+            heading.textContent =
+                "🔵 In Progress Complaints";
+
+        }
+
+        else if (
+            selectedStatus === "Resolved"
+        ) {
+
+            pageTitle.textContent =
+                "🟢 Resolved Complaints";
+
+            heading.textContent =
+                "🟢 Resolved Complaints";
+
+        }
+
+        else {
+
+            pageTitle.textContent =
+                "📋 All Complaints";
+
+            heading.textContent =
+                "📋 All Complaints";
+
+        }
+
+
+        /* LOAD COMPLAINTS */
+
+        async function loadComplaints() {
+
+            const container =
+                document.getElementById(
+                    "complaintsContainer"
+                );
+
+            const countText =
+                document.getElementById(
+                    "countText"
+                );
+
+
+            try {
+
+                const response =
+                    await fetch("/complaints");
+
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Failed to fetch complaints"
+                    );
+                }
+
+
+                const complaints =
+                    await response.json();
+
+
+                let filteredComplaints;
+
+
+                if (
+                    selectedStatus === "All"
+                ) {
+
+                    filteredComplaints =
+                        complaints;
+
+                }
+
+                else {
+
+                    filteredComplaints =
+                        complaints.filter(
+                            complaint =>
+                                complaint.status ===
+                                selectedStatus
+                        );
+
+                }
+
+
+                countText.textContent =
+                    `${filteredComplaints.length} complaint(s) found`;
+
+
+                container.innerHTML = "";
+
+
+                if (
+                    filteredComplaints.length === 0
+                ) {
+
+                    container.innerHTML = `
+                        <div class="message">
+                            No complaints found for this status.
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                filteredComplaints.forEach(
+                    complaint => {
+
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        card.className =
+                            "complaint-card";
+
+
+                        /* STATUS CLASS */
+
+                        let statusClass =
+                            "status-pending";
+
+
+                        if (
+                            complaint.status ===
+                            "In Progress"
+                        ) {
+
+                            statusClass =
+                                "status-progress";
+
+                        }
+
+                        else if (
+                            complaint.status ===
+                            "Resolved"
+                        ) {
+
+                            statusClass =
+                                "status-resolved";
+
+                        }
+
+
+                        /* PHOTO */
+
+                        let photoHTML = "";
+
+
+                        if (complaint.photo) {
+
+                            photoHTML = `
+                                <div class="photo-box">
+
+                                    <p>📷 Photo</p>
+
+                                    <img
+                                        src="${complaint.photo}"
+                                        alt="Complaint Photo"
+                                        onclick="openPhoto('${complaint.photo}')"
+                                    >
+
+                                </div>
+                            `;
+
+                        }
+
+
+                        /* DATE */
+
+                        let submittedDate =
+                            "Not available";
+
+
+                        if (
+                            complaint.createdAt
+                        ) {
+
+                            submittedDate =
+                                new Date(
+                                    complaint.createdAt
+                                ).toLocaleString(
+                                    "en-IN"
+                                );
+
+                        }
+
+
+                        card.innerHTML = `
+
+                            <div class="complaint-content">
+
+                                <div class="complaint-info">
+
+                                    <h3>
+                                        ${complaint.title}
+                                    </h3>
+
+
+                                    <div class="complaint-id">
+                                        Complaint ID:
+                                        ${complaint.complaintId}
+                                    </div>
+
+
+                                    <p>
+                                        <b>Category:</b>
+                                        ${complaint.category}
+                                    </p>
+
+
+                                    <p>
+                                        <b>Location:</b>
+                                        ${complaint.location}
+                                    </p>
+
+
+                                    <p>
+                                        <b>Description:</b>
+                                        ${complaint.description}
+                                    </p>
+
+
+                                    <p>
+                                        <b>Priority:</b>
+                                        ${complaint.priority}
+                                    </p>
+
+
+                                    <p>
+                                        <b>Submitted:</b>
+                                        ${submittedDate}
+                                    </p>
+
+
+                                    <p>
+                                        <b>Status:</b>
+                                        <span class="status-badge ${statusClass}">
+                                            ${complaint.status}
+                                        </span>
+                                    </p>
+
+
+                                    <select
+                                        class="status-select"
+                                        onchange="updateStatus(
+                                            '${complaint._id}',
+                                            this.value
+                                        )"
+                                    >
+
+                                        <option
+                                            value="Pending"
+                                            ${complaint.status === "Pending" ? "selected" : ""}
+                                        >
+                                            Pending
+                                        </option>
+
+                                        <option
+                                            value="In Progress"
+                                            ${complaint.status === "In Progress" ? "selected" : ""}
+                                        >
+                                            In Progress
+                                        </option>
+
+                                        <option
+                                            value="Resolved"
+                                            ${complaint.status === "Resolved" ? "selected" : ""}
+                                        >
+                                            Resolved
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                ${photoHTML}
+
+                            </div>
+
+                        `;
+
+
+                        container.appendChild(
+                            card
+                        );
+
+                    }
+                );
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Error loading complaints:",
+                    error
+                );
+
+
+                countText.textContent =
+                    "";
+
+
+                container.innerHTML = `
+                    <div class="message">
+                        ❌ Failed to load complaints.
+                        <br><br>
+                        Please make sure the server is running.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* UPDATE STATUS */
+
+        async function updateStatus(
+            complaintId,
+            status
+        ) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/complaints/${complaintId}`,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                status: status
+                            })
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Status update failed"
+                    );
+
+                }
+
+
+                /*
+                   Reload the page data.
+
+                   This is important because if
+                   Pending is selected and we
+                   change it to Resolved,
+                   the complaint should disappear
+                   from the Pending page.
+                */
+
+                await loadComplaints();
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Error updating status:",
+                    error
+                );
+
+                alert(
+                    "Failed to update complaint status."
+                );
+
+            }
+
+        }
+
+
+        /* PHOTO OPEN */
+
+        function openPhoto(
+            photo
+        ) {
+
+            document.getElementById(
+                "modalImage"
+            ).src = photo;
+
+
+            document.getElementById(
+                "photoModal"
+            ).style.display =
+                "flex";
+
+        }
+
+
+        /* PHOTO CLOSE */
+
+        function closePhoto() {
+
+            document.getElementById(
+                "photoModal"
+            ).style.display =
+                "none";
+
+        }
+
+
+        /* START */
+
+        loadComplaints();
+
+    </script>
+
+</body>
+</html>

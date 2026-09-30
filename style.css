@@ -618,3 +618,51 @@ cursor: pointer;
 .close-weekly:hover {
     background: #475569;
 }
+/* Monthly Analytics */
+
+.monthly-analytics,
+.monthly-history {
+    margin-top: 30px;
+    padding: 25px;
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.monthly-analytics h2,
+.monthly-history h2 {
+    color: #93c5fd;
+    margin-bottom: 8px;
+}
+
+.monthly-item,
+.history-item {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: #172033;
+    border: 1px solid #334155;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.monthly-item span {
+    color: #cbd5e1;
+}
+
+.history-item {
+    display: block;
+}
+
+.history-item h3 {
+    color: #c4b5fd;
+    margin-bottom: 8px;
+}
+
+.history-item p {
+    color: #cbd5e1;
+    margin: 5px 0;
+}

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Duplicate Problem Detector - CampusFix</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        body {
+            margin: 0;
+        }
+
+        .duplicate-page {
+            width: 100%;
+            min-height: 100vh;
+
+            box-sizing: border-box;
+
+            padding: 35px 6% 50px 6%;
+
+            background: #0f172a;
+        }
+
+        .duplicate-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .duplicate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .duplicate-header h1 {
+            margin: 0 0 8px 0;
+
+            color: white;
+            font-size: 32px;
+        }
+
+        .duplicate-header p {
+            margin: 0;
+
+            color: #94a3b8;
+            font-size: 17px;
+        }
+
+        .duplicate-back-btn {
+            padding: 11px 18px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #334155;
+            color: white;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .duplicate-back-btn:hover {
+            background: #475569;
+        }
+
+        .duplicate-alert {
+            margin-bottom: 20px;
+            padding: 15px;
+
+            background: rgba(245, 158, 11, 0.15);
+
+            border: 1px solid rgba(245, 158, 11, 0.45);
+
+            border-radius: 12px;
+
+            color: #fbbf24;
+
+            text-align: center;
+
+            font-weight: 700;
+        }
+
+        .duplicate-group {
+            margin-bottom: 25px;
+            padding: 20px;
+
+            background: #172033;
+
+            border: 1px solid #475569;
+
+            border-radius: 16px;
+        }
+
+        .duplicate-group-header {
+            margin-bottom: 18px;
+
+            text-align: center;
+        }
+
+        .duplicate-group-header h2 {
+            margin: 0 0 8px 0;
+
+            color: #fbbf24;
+        }
+
+        .duplicate-group-header p {
+            margin: 0;
+
+            color: #cbd5e1;
+
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .duplicate-complaint-card {
+            margin-top: 14px;
+            padding: 18px;
+
+            background: #1e293b;
+
+            border: 1px solid #334155;
+
+            border-radius: 12px;
+        }
+
+        .duplicate-complaint-card h3 {
+            margin: 0 0 12px 0;
+
+            color: #93c5fd;
+        }
+
+        .duplicate-complaint-card p {
+            margin: 8px 0;
+
+            color: #cbd5e1;
+        }
+
+        .duplicate-complaint-card b {
+            color: #f8fafc;
+        }
+
+        .duplicate-resolve-btn {
+            margin-top: 18px;
+
+            padding: 12px 20px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #16a34a;
+
+            color: white;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .duplicate-resolve-btn:hover {
+            background: #15803d;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="duplicate-page">
+
+    <div class="duplicate-container">
+
+        <div class="duplicate-header">
+
+            <div>
+
+                <h1>
+                    🔍 Duplicate Problem Detector
+                </h1>
+
+                <p>
+                    Repeated problems reported by multiple students
+                </p>
+
+            </div>
+
+            <button
+                class="duplicate-back-btn"
+                onclick="window.location.href='admin-dashboard.html'"
+            >
+                ← Back to Admin
+            </button>
+
+        </div>
+
+
+        <div id="duplicateProblemsStats">
+
+            <p style="color:white;">
+                Loading duplicate problems...
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+async function loadDuplicateProblems() {
+
+    const container =
+        document.getElementById(
+            "duplicateProblemsStats"
+        );
+
+    container.innerHTML =
+        "<p style='color:white;'>Loading duplicate problems...</p>";
+
+
+    try {
+
+        const response =
+            await fetch("/same-problems");
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                "Duplicate problem data not found"
+            );
+
+        }
+
+
+        if (
+            !data.groups ||
+            data.groups.length === 0
+        ) {
+
+            container.innerHTML = `
+                <div class="duplicate-alert">
+                    ✅ No duplicated problems found.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        let html = `
+            <div class="duplicate-alert">
+                ⚠️ Duplicated Problem Detected
+            </div>
+        `;
+
+
+        data.groups.forEach(
+            (group) => {
+
+                html += `
+                    <div class="duplicate-group">
+
+                        <div class="duplicate-group-header">
+
+                            <h2>
+                                ⚠️ ${group.category} — ${group.location}
+                            </h2>
+
+                            <p>
+                                ${group.count}
+                                Students reported this problem
+                            </p>
+
+                        </div>
+                `;
+
+
+                group.complaints.forEach(
+                    (complaint, index) => {
+
+                        html += `
+                            <div class="duplicate-complaint-card">
+
+                                <h3>
+                                    Complaint ${index + 1}:
+                                    ${complaint.title}
+                                </h3>
+
+                                <p>
+                                    <b>Complaint ID:</b>
+                                    ${complaint.complaintId || "Old Complaint"}
+                                </p>
+
+                                <p>
+                                    <b>Category:</b>
+                                    ${complaint.category}
+                                </p>
+
+                                <p>
+                                    <b>Location:</b>
+                                    ${complaint.location}
+                                </p>
+
+                                <p>
+                                    <b>Description:</b>
+                                    ${complaint.description}
+                                </p>
+
+                                <p>
+                                    <b>Priority:</b>
+                                    ${complaint.priority}
+                                </p>
+
+                                <p>
+                                    <b>Status:</b>
+                                    ${complaint.status}
+                                </p>
+
+                            </div>
+                        `;
+
+                    }
+                );
+
+
+                const ids =
+                    JSON.stringify(
+                        group.complaints.map(
+                            complaint => complaint._id
+                        )
+                    );
+
+
+                html += `
+                        <button
+                            class="duplicate-resolve-btn"
+                            onclick='resolveDuplicateProblems(${ids})'
+                        >
+                            ✅ Resolve All ${group.count} Complaints
+                        </button>
+
+                    </div>
+                `;
+
+            }
+        );
+
+
+        container.innerHTML = html;
+
+
+    } catch (error) {
+
+        console.log(
+            "Duplicate Detector Error:",
+            error
+        );
+
+        container.innerHTML = `
+            <div class="duplicate-alert">
+                ❌ Failed to load duplicate problems.
+            </div>
+        `;
+
+    }
+
+}
+
+
+async function resolveDuplicateProblems(
+    complaintIds
+) {
+
+    if (
+        !confirm(
+            `Resolve all ${complaintIds.length} complaints in this duplicated problem?`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/same-problems/resolve",
+                {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            complaintIds:
+                                complaintIds
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        alert(
+            result.message
+        );
+
+
+        await loadDuplicateProblems();
+
+
+    } catch (error) {
+
+        console.log(
+            "Duplicate Resolve Error:",
+            error
+        );
+
+        alert(
+            "Failed to resolve duplicate complaints."
+        );
+
+    }
+
+}
+
+
+loadDuplicateProblems();
+
+</script>
+
+</body>
+
+</html>

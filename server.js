@@ -5,6 +5,7 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 const Complaint = require("./models/Complaint");
 const Student = require("./models/Student");
+const MonthlyAnalytics = require("./models/MonthlyAnalytics");
 const app = express();
 app.use("/uploads", express.static("uploads"));
 const upload = multer({ dest: "uploads/" });
@@ -145,6 +146,206 @@ app.get("/complaints", async (req, res) => {
         });
     }
 });
+async function ensureMonthlyHistory() {
+
+    const now = new Date();
+
+    // Current month start
+    const currentMonthStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1
+    );
+
+    // Get all complaints before current month
+    const oldComplaints = await Complaint.find({
+        createdAt: {
+            $lt: currentMonthStart
+        }
+    }).sort({ createdAt: 1 });
+
+    if (oldComplaints.length === 0) {
+        return;
+    }
+
+    // Find the first month having complaints
+    const firstDate = new Date(oldComplaints[0].createdAt);
+
+    let year = firstDate.getFullYear();
+    let month = firstDate.getMonth();
+
+    // Check every completed month
+    while (
+        year < currentMonthStart.getFullYear() ||
+        (year === currentMonthStart.getFullYear() &&
+         month < currentMonthStart.getMonth())
+    ) {
+
+        const startOfMonth = new Date(year, month, 1);
+
+        const startOfNextMonth = new Date(
+            year,
+            month + 1,
+            1
+        );
+
+        const monthKey =
+            `${year}-${String(month + 1).padStart(2, "0")}`;
+
+        // Check if this month is already saved
+        const alreadySaved =
+            await MonthlyAnalytics.findOne({ monthKey });
+
+        if (!alreadySaved) {
+
+            const monthlyComplaints =
+                oldComplaints.filter(complaint => {
+
+                    const date = new Date(complaint.createdAt);
+
+                    return (
+                        date >= startOfMonth &&
+                        date < startOfNextMonth
+                    );
+
+                });
+
+            if (monthlyComplaints.length > 0) {
+
+                const categoryCounts = {};
+
+                monthlyComplaints.forEach(complaint => {
+
+                    const category = complaint.category;
+
+                    if (category) {
+                        categoryCounts[category] =
+                            (categoryCounts[category] || 0) + 1;
+                    }
+
+                });
+
+                const topCategory =
+                    Object.entries(categoryCounts)
+                        .sort((a, b) =>
+                            b[1] - a[1] ||
+                            a[0].localeCompare(b[0])
+                        )[0];
+
+                if (topCategory) {
+
+                    await MonthlyAnalytics.create({
+                        monthKey: monthKey,
+
+                        monthLabel:
+                            startOfMonth.toLocaleDateString("en-IN", {
+                                month: "long",
+                                year: "numeric"
+                            }),
+
+                        topCategory: topCategory[0],
+
+                        complaintCount: topCategory[1]
+                    });
+
+                }
+
+            }
+
+        }
+
+        // Move to next month
+        month++;
+
+        if (month > 11) {
+            month = 0;
+            year++;
+        }
+
+    }
+
+}
+app.get("/analytics/monthly", async (req, res) => {
+
+    try {
+        
+        await ensureMonthlyHistory();
+
+        const now = new Date();
+
+        // Current month start
+        const startOfMonth = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            1
+        );
+
+        // Next month start
+        const startOfNextMonth = new Date(
+            now.getFullYear(),
+            now.getMonth() + 1,
+            1
+        );
+
+        // Get current month's complaints
+        const complaints = await Complaint.find({
+            createdAt: {
+                $gte: startOfMonth,
+                $lt: startOfNextMonth
+            }
+        });
+
+        // Count complaints category-wise
+        const categoryCounts = {};
+
+        complaints.forEach(complaint => {
+
+            const category = complaint.category;
+
+            if (category) {
+                categoryCounts[category] =
+                    (categoryCounts[category] || 0) + 1;
+            }
+
+        });
+
+        // Sort categories by complaint count
+        const top5 = Object.entries(categoryCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([category, count]) => ({
+                category: category,
+                count: count
+            }));
+
+        // Get saved monthly history
+        const history = await MonthlyAnalytics.find()
+            .sort({ monthKey: -1 });
+
+        res.json({
+            success: true,
+            currentMonth: {
+                month: now.toLocaleDateString("en-IN", {
+                    month: "long",
+                    year: "numeric"
+                }),
+                top5: top5
+            },
+            history: history
+        });
+
+    } catch (error) {
+
+        console.log("Monthly Analytics Error:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to load monthly analytics"
+        });
+
+    }
+
+});
 app.post("/report", upload.single("photo"), async (req, res) => {
     try {
 
@@ -168,7 +369,7 @@ app.post("/report", upload.single("photo"), async (req, res) => {
     description,
     priority,
     studentId,
-    photo: req.file ? req.file.path : null
+photo: req.file ? `/uploads/${req.file.filename}` : null
 });
 
         await newComplaint.save();
@@ -192,6 +393,322 @@ app.post("/report", upload.single("photo"), async (req, res) => {
 
     }
 });
+/* ==========================================
+   DUPLICATE PROBLEM DETECTOR
+========================================== */
+
+function normalizeProblemText(text) {
+    return String(text || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function getProblemTokens(text) {
+
+    const stopWords = new Set([
+        "the", "is", "are", "a", "an",
+        "in", "on", "of", "to", "and",
+        "for", "with", "not", "very",
+        "this", "that", "problem",
+        "issue", "please"
+    ]);
+
+    return new Set(
+        normalizeProblemText(text)
+            .split(" ")
+            .filter(word =>
+                word.length > 2 &&
+                !stopWords.has(word)
+            )
+    );
+}
+
+function areSimilarProblems(first, second) {
+
+    const firstText =
+        normalizeProblemText(
+            `${first.title} ${first.description}`
+        );
+
+    const secondText =
+        normalizeProblemText(
+            `${second.title} ${second.description}`
+        );
+
+    if (!firstText || !secondText) {
+        return false;
+    }
+
+    if (
+        firstText.includes(secondText) ||
+        secondText.includes(firstText)
+    ) {
+        return true;
+    }
+
+    const firstTokens =
+        getProblemTokens(firstText);
+
+    const secondTokens =
+        getProblemTokens(secondText);
+
+    if (
+        firstTokens.size === 0 ||
+        secondTokens.size === 0
+    ) {
+        return false;
+    }
+
+    let common = 0;
+
+    firstTokens.forEach(token => {
+
+        if (secondTokens.has(token)) {
+            common++;
+        }
+
+    });
+
+    const union =
+        new Set([
+            ...firstTokens,
+            ...secondTokens
+        ]).size;
+
+    const similarity =
+        common / union;
+
+    return similarity >= 0.45;
+}
+
+
+app.get("/same-problems", async (req, res) => {
+
+    try {
+
+        const complaints =
+            await Complaint.find({
+                status: {
+                    $in: [
+                        "Pending",
+                        "In Progress"
+                    ]
+                }
+            }).sort({
+                createdAt: 1
+            });
+
+
+        const locationGroups = {};
+
+
+        complaints.forEach(complaint => {
+
+            const key =
+                `${normalizeProblemText(complaint.category)}|` +
+                `${normalizeProblemText(complaint.location)}`;
+
+            if (!locationGroups[key]) {
+                locationGroups[key] = [];
+            }
+
+            locationGroups[key].push(
+                complaint
+            );
+
+        });
+
+
+        const groups = [];
+
+
+        Object.values(locationGroups)
+            .forEach(locationComplaints => {
+
+                const clusters = [];
+
+
+                locationComplaints.forEach(
+                    complaint => {
+
+                        let matchingCluster = null;
+
+
+                        for (
+                            const cluster of clusters
+                        ) {
+
+                            if (
+                                cluster.some(
+                                    existingComplaint =>
+                                        areSimilarProblems(
+                                            existingComplaint,
+                                            complaint
+                                        )
+                                )
+                            ) {
+
+                                matchingCluster =
+                                    cluster;
+
+                                break;
+                            }
+
+                        }
+
+
+                        if (matchingCluster) {
+
+                            matchingCluster.push(
+                                complaint
+                            );
+
+                        } else {
+
+                            clusters.push([
+                                complaint
+                            ]);
+
+                        }
+
+                    }
+                );
+
+
+                clusters
+                    .filter(
+                        cluster =>
+                            cluster.length >= 2
+                    )
+                    .forEach(cluster => {
+
+                        groups.push({
+
+                            category:
+                                cluster[0].category,
+
+                            location:
+                                cluster[0].location,
+
+                            count:
+                                cluster.length,
+
+                            complaints:
+                                cluster
+
+                        });
+
+                    });
+
+            });
+
+
+        res.json({
+            success: true,
+            groups: groups
+        });
+
+
+    } catch (error) {
+
+        console.log(
+            "Duplicate Detector Error:",
+            error
+        );
+
+        res.status(500).json({
+
+            success: false,
+
+            message:
+                "Failed to detect duplicate problems"
+
+        });
+
+    }
+
+});
+
+
+app.put(
+    "/same-problems/resolve",
+    async (req, res) => {
+
+        try {
+
+            const {
+                complaintIds
+            } = req.body;
+
+
+            if (
+                !Array.isArray(complaintIds) ||
+                complaintIds.length === 0
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "No complaints selected"
+
+                });
+
+            }
+
+
+            const result =
+                await Complaint.updateMany(
+
+                    {
+                        _id: {
+                            $in: complaintIds
+                        }
+                    },
+
+                    {
+                        $set: {
+                            status: "Resolved"
+                        }
+                    }
+
+                );
+
+
+            res.json({
+
+                success: true,
+
+                message:
+                    `${result.modifiedCount} duplicate complaints resolved successfully!`
+
+            });
+
+
+        } catch (error) {
+
+            console.log(
+                "Duplicate Resolve Error:",
+                error
+            );
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Failed to resolve duplicate complaints"
+
+            });
+
+        }
+
+    }
+);
+
 app.put("/complaints/:id", async (req, res) => {
     try {
         const { status } = req.body;

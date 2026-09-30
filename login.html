@@ -8,48 +8,115 @@
     <title>Student Login - CampusFix 2.0</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .login-box {
+            max-width: 420px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .login-box h1 {
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            margin-bottom: 25px;
+            opacity: 0.85;
+        }
+
+        .login-box input {
+            width: 100%;
+            box-sizing: border-box;
+            margin: 8px 0;
+            padding: 13px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            outline: none;
+            font-size: 15px;
+        }
+
+        .login-box button {
+            width: 100%;
+            margin-top: 15px;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .login-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .back-home {
+            margin-top: 20px;
+        }
+    </style>
+
 </head>
 
 <body>
 
     <div class="container">
 
-        <h1>CampusFix 2.0</h1>
+        <div class="login-box">
 
-        <p>Student Login</p>
+            <div class="login-tag">
+                🎓 Student Portal
+            </div>
 
-        <form id="loginForm">
+            <h1>CampusFix 2.0</h1>
 
-            <input
-                type="text"
-                id="studentId"
-                placeholder="Roll Number"
-                required
-            >
+            <p class="login-subtitle">
+                Login to report and track your campus problems.
+            </p>
 
-            <input
-                type="text"
-                id="name"
-                placeholder="Full Name"
-                required
-            >
+            <form id="loginForm">
 
-            <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-            >
+                <input
+                    type="text"
+                    id="studentId"
+                    placeholder="Roll Number"
+                    required
+                >
 
-            <button type="submit">
-                Login
-            </button>
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Full Name"
+                    required
+                >
 
-        </form>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    required
+                >
 
-        <p>
-            <a href="index.html">Back to Home</a>
-        </p>
+                <button type="submit">
+                    Login to CampusFix
+                </button>
+
+            </form>
+
+            <p class="back-home">
+                <a href="index.html">← Back to Home</a>
+            </p>
+
+        </div>
 
     </div>
 

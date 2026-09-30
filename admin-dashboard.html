@@ -170,7 +170,155 @@
             background: #2563eb;
             border-radius: 20px;
         }
+/* ==========================================
+   DUPLICATE PROBLEM DETECTOR
+========================================== */
 
+.duplicate-problems-box {
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 15px 0 20px 0;
+    padding: 22px;
+
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 16px;
+}
+
+.duplicate-alert {
+    margin-bottom: 18px;
+    padding: 14px 16px;
+
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    border-radius: 12px;
+
+    color: #fbbf24;
+    font-weight: 700;
+}
+
+.duplicate-group {
+    margin-bottom: 20px;
+    padding: 18px;
+
+    background: #172033;
+    border: 1px solid #475569;
+    border-radius: 14px;
+}
+
+.duplicate-group-header {
+    margin-bottom: 15px;
+}
+
+.duplicate-group-header h3 {
+    margin: 0 0 7px 0;
+    color: #fbbf24;
+    font-size: 20px;
+}
+
+.duplicate-group-header p {
+    margin: 5px 0;
+    color: #cbd5e1;
+}
+
+.duplicate-complaint-card {
+    margin-top: 12px;
+    padding: 16px;
+
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+}
+
+.duplicate-complaint-card h4 {
+    margin: 0 0 10px 0;
+    color: #93c5fd;
+    font-size: 18px;
+}
+
+.duplicate-complaint-card p {
+    margin: 7px 0;
+    color: #cbd5e1;
+}
+
+.duplicate-complaint-card b {
+    color: #f8fafc;
+}
+
+.duplicate-resolve-btn {
+    margin-top: 16px;
+    padding: 11px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #16a34a;
+    color: white;
+
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.duplicate-resolve-btn:hover {
+    background: #15803d;
+}
+/* ==========================================
+   DUPLICATE PROBLEM - SEPARATE PAGE
+========================================== */
+
+/* ==========================================
+   DUPLICATE PROBLEM - FULL SCREEN PAGE
+========================================== */
+
+/* ==========================================
+   DUPLICATE PROBLEM - SAME AS ANALYTICS
+========================================== */
+
+.duplicate-problems-page {
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 15px 0 20px 0;
+    padding: 22px;
+
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 16px;
+}
+
+.duplicate-problems-page .admin-analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.duplicate-problems-page #duplicateProblemsStats {
+    width: 100%;
+}
+
+.duplicate-problems-page .admin-analytics-header {
+    max-width: 1100px;
+    margin: 0 auto 25px auto;
+}
+
+.duplicate-problems-page #duplicateProblemsStats {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.duplicate-problems-page .admin-analytics-header {
+    max-width: 1100px;
+    margin: 0 auto 25px auto;
+}
+
+.duplicate-problems-page #duplicateProblemsStats {
+    max-width: 1100px;
+    margin: 0 auto;
+}
         /* Filters */
 
         .admin-filter-row {
@@ -196,23 +344,135 @@
             flex-wrap: wrap;
         }
 
-        .admin-filter-buttons button,
-        .admin-home-btn {
-            padding: 11px 18px;
+     /* ==========================================
+   ADMIN FILTER BUTTONS - UNIQUE STYLE
+========================================== */
 
-            border-radius: 10px;
+.admin-filter-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
 
-            border: 1px solid #475569;
+    margin: 28px 0;
+    padding: 14px;
 
-            background: #1e293b;
-            color: white;
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 16px;
+}
 
-            font-weight: 600;
-            cursor: pointer;
+.admin-filter-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 
-            transition: 0.2s;
-        }
 
+/* Common button */
+
+.admin-filter-buttons button {
+    padding: 10px 17px;
+
+    border-radius: 10px;
+    border: 1px solid transparent;
+
+    color: white;
+    font-weight: 800;
+    font-size: 14px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+
+/* All */
+
+.admin-filter-buttons button:nth-child(1) {
+    background: #475569;
+    border-color: #64748b;
+}
+
+.admin-filter-buttons button:nth-child(1):hover {
+    background: #64748b;
+    transform: translateY(-2px);
+}
+
+
+/* Pending - Yellow */
+
+.admin-filter-buttons button:nth-child(2) {
+    background: rgba(245, 158, 11, 0.18);
+    border-color: #f59e0b;
+    color: #fbbf24;
+}
+
+.admin-filter-buttons button:nth-child(2):hover {
+    background: rgba(245, 158, 11, 0.30);
+    transform: translateY(-2px);
+}
+
+
+/* In Progress - Blue */
+
+.admin-filter-buttons button:nth-child(3) {
+    background: rgba(59, 130, 246, 0.18);
+    border-color: #3b82f6;
+    color: #93c5fd;
+}
+
+.admin-filter-buttons button:nth-child(3):hover {
+    background: rgba(59, 130, 246, 0.30);
+    transform: translateY(-2px);
+}
+
+
+/* Resolved - Green */
+
+.admin-filter-buttons button:nth-child(4) {
+    background: rgba(34, 197, 94, 0.18);
+    border-color: #22c55e;
+    color: #86efac;
+}
+
+.admin-filter-buttons button:nth-child(4):hover {
+    background: rgba(34, 197, 94, 0.30);
+    transform: translateY(-2px);
+}
+
+
+/* Back to Home - Unique */
+
+.admin-home-btn {
+    padding: 11px 20px;
+
+    border: 1px solid #8b5cf6;
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #7c3aed,
+        #4f46e5
+    );
+
+    color: white;
+
+    font-weight: 800;
+    font-size: 14px;
+
+    cursor: pointer;
+
+    box-shadow: 0 6px 18px rgba(124, 58, 237, 0.25);
+
+    transition: 0.2s;
+}
+
+.admin-home-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(124, 58, 237, 0.35);
+}
         .admin-filter-buttons button:hover {
             background: #2563eb;
         }
@@ -298,16 +558,23 @@
             cursor: pointer;
         }
 
-        .admin-status-select {
-            padding: 8px 12px;
+       .admin-status-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #0f172a;
+    font-weight: 600;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
 
-            border-radius: 8px;
-
-            background: #f8fafc;
-            color: #0f172a;
-
-            font-weight: 600;
-        }
+.admin-status-select:hover,
+.admin-status-select:focus,
+.admin-status-select:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
 
         @media (max-width: 700px) {
 
@@ -326,6 +593,164 @@
 
         }
 
+
+        /* ==================================
+           ANALYTICS SECOND-PAGE OVERLAY
+        =================================== */
+
+        .analytics-page-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            display: none;
+            padding: 30px;
+            box-sizing: border-box;
+            background: rgba(2, 6, 23, 0.88);
+            overflow-y: auto;
+        }
+
+        .analytics-page {
+            width: min(1000px, 100%);
+            min-height: calc(100vh - 60px);
+            margin: 0 auto;
+            box-sizing: border-box;
+            padding: 28px;
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 18px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+        }
+
+        .analytics-page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .analytics-page-header h2 {
+            margin: 0 0 5px 0;
+            color: #ffffff;
+            font-size: 28px;
+        }
+
+        .analytics-page-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .analytics-page-close {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            border: none;
+            border-radius: 10px;
+            background: #334155;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .analytics-page-close:hover {
+            background: #475569;
+        }
+
+        .analytics-highlight {
+            margin-bottom: 20px;
+            padding: 16px 18px;
+            background: #172033;
+            border: 1px solid #334155;
+            border-radius: 12px;
+        }
+
+        .analytics-highlight-title {
+            margin: 0 0 5px 0;
+            color: #93c5fd;
+            font-size: 14px;
+        }
+
+        .analytics-highlight-value {
+            margin: 0;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .monthly-page-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .monthly-page-card {
+            min-width: 0;
+            padding: 18px;
+            background: #172033;
+            border: 1px solid #334155;
+            border-radius: 14px;
+        }
+
+        .monthly-page-card h3 {
+            margin: 0 0 5px 0;
+            color: #ffffff;
+            font-size: 18px;
+        }
+
+        .monthly-page-card > p {
+            margin: 0 0 14px 0;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .monthly-page-card .monthly-item,
+        .monthly-page-card .history-item {
+            padding: 10px 12px;
+            margin: 7px 0;
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 9px;
+        }
+
+        .monthly-page-card .monthly-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            color: #e2e8f0;
+        }
+
+        .monthly-page-card .monthly-item span {
+            color: #94a3b8;
+        }
+
+        .monthly-page-card .history-item h4 {
+            margin: 0 0 4px 0;
+            color: #93c5fd;
+            font-size: 15px;
+        }
+
+        .monthly-page-card .history-item p {
+            margin: 2px 0;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .analytics-page-overlay {
+                padding: 12px;
+            }
+
+            .analytics-page {
+                min-height: calc(100vh - 24px);
+                padding: 18px;
+            }
+
+            .monthly-page-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
     </style>
 
 </head>
@@ -350,29 +775,41 @@
              STATISTICS
         =================================== -->
 
-        <div class="stats">
+      <div class="stats">
 
-            <div>
-                <h2 id="totalCount">0</h2>
-                <p>Total Complaints</p>
-            </div>
+    <div
+        onclick="window.location.href = './admin-complaints.html?status=All';"
+        style="cursor:pointer;"
+    >
+        <h2 id="totalCount">0</h2>
+        <p>Total Complaints</p>
+    </div>
 
-            <div>
-                <h2 id="pendingCount">0</h2>
-                <p>Pending</p>
-            </div>
+    <div
+        onclick="window.location.href = './admin-complaints.html?status=Pending';"
+        style="cursor:pointer;"
+    >
+        <h2 id="pendingCount">0</h2>
+        <p>Pending</p>
+    </div>
 
-            <div>
-                <h2 id="progressCount">0</h2>
-                <p>In Progress</p>
-            </div>
+    <div
+        onclick="window.location.href = './admin-complaints.html?status=In%20Progress';"
+        style="cursor:pointer;"
+    >
+        <h2 id="progressCount">0</h2>
+        <p>In Progress</p>
+    </div>
 
-            <div>
-                <h2 id="resolvedCount">0</h2>
-                <p>Resolved</p>
-            </div>
+    <div
+        onclick="window.location.href = './admin-complaints.html?status=Resolved';"
+        style="cursor:pointer;"
+    >
+        <h2 id="resolvedCount">0</h2>
+        <p>Resolved</p>
+    </div>
 
-        </div>
+</div>
 
 
         <!-- ==================================
@@ -381,7 +818,7 @@
 
         <div
             class="admin-feature-box"
-            onclick="toggleWeeklyAnalytics()"
+            onclick="openAnalyticsPage('weekly')"
         >
 
             <div
@@ -406,59 +843,12 @@
 
 
         <!-- ==================================
-             WEEKLY ANALYTICS
-        =================================== -->
-
-        <div
-            id="weeklyAnalyticsBox"
-            class="admin-analytics-box"
-            style="display:none;"
-        >
-
-            <div class="admin-analytics-header">
-
-                <div>
-
-                    <h2>
-                        📊 Weekly Problem Analytics
-                    </h2>
-
-                    <p
-                        class="admin-analytics-subtitle"
-                        id="weeklyDateRange"
-                    >
-                        Loading date range...
-                    </p>
-
-                </div>
-
-                <button
-                    class="admin-close-btn"
-                    onclick="event.stopPropagation(); toggleWeeklyAnalytics();"
-                >
-                    ✕
-                </button>
-
-            </div>
-
-            <div id="weeklyStats">
-
-                <p>
-                    Loading weekly analytics...
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- ==================================
              MOST COMPLAINTS BUTTON
         =================================== -->
 
         <div
             class="admin-feature-box"
-            onclick="toggleMostComplaints()"
+            onclick="openAnalyticsPage('most')"
         >
 
             <div
@@ -482,44 +872,102 @@
 
         </div>
 
+<!-- ==================================
+     DUPLICATE PROBLEM DETECTOR BUTTON
+=================================== -->
 
+<div
+    class="admin-feature-box"
+    onclick="window.location.href='duplicate-problems.html'"
+>
+    <div
+        class="admin-feature-icon"
+        style="background:#7c3aed;"
+    >
+        🔍
+    </div>
+
+    <div>
+
+        <h3>
+            Duplicate Problem Detector
+        </h3>
+
+        <p>
+            Find repeated complaints reported by multiple students
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================
+     DUPLICATE PROBLEM DETECTOR BOX
+=================================== -->
+
+<div
+    id="duplicateProblemsBox"
+    class="duplicate-problems-page"
+    style="display:none;"
+>
+
+    <div class="admin-analytics-header">
+
+        <div>
+
+            <h2>
+                🔍 Duplicate Problem Detector
+            </h2>
+
+            <p class="admin-analytics-subtitle">
+                Repeated problems reported by multiple students
+            </p>
+
+        </div>
+
+        <button
+            class="admin-close-btn"
+            onclick="event.stopPropagation(); toggleDuplicateProblems();"
+        >
+            ✕
+        </button>
+
+    </div>
+
+    <div id="duplicateProblemsStats">
+
+        <p>
+            Loading duplicate problems...
+        </p>
+
+    </div>
+
+</div>
         <!-- ==================================
-             MOST COMPLAINTS ANALYTICS
+             MONTHLY ANALYTICS BUTTON
         =================================== -->
 
         <div
-            id="mostComplaintsBox"
-            class="admin-analytics-box"
-            style="display:none;"
+            class="admin-feature-box"
+            onclick="openAnalyticsPage('monthly')"
         >
 
-            <div class="admin-analytics-header">
-
-                <div>
-
-                    <h2>
-                        🏆 Most Complaints
-                    </h2>
-
-                    <p class="admin-analytics-subtitle">
-                        Most reported problem categories
-                    </p>
-
-                </div>
-
-                <button
-                    class="admin-close-btn"
-                    onclick="event.stopPropagation(); toggleMostComplaints();"
-                >
-                    ✕
-                </button>
-
+            <div
+                class="admin-feature-icon"
+                style="background:#7c3aed;"
+            >
+                📅
             </div>
 
-            <div id="mostComplaintsStats">
+            <div>
+
+                <h3>
+                    Monthly Analytics
+                </h3>
 
                 <p>
-                    Loading...
+                    View monthly problem analytics and history
                 </p>
 
             </div>
@@ -589,6 +1037,86 @@
 
 
 
+<!-- ==========================================
+     ANALYTICS SECOND-PAGE OVERLAY
+========================================== -->
+
+<div id="analyticsPageOverlay" class="analytics-page-overlay">
+
+    <div id="weeklyAnalyticsPage" class="analytics-page" style="display:none;">
+
+        <div class="analytics-page-header">
+            <div>
+                <h2>📊 Weekly Analytics</h2>
+                <p id="weeklyPageDateRange">Loading date range...</p>
+            </div>
+            <button class="analytics-page-close" onclick="closeAnalyticsPage()">✕</button>
+        </div>
+
+        <div class="analytics-highlight">
+            <p class="analytics-highlight-title">Most Reported Problem This Week</p>
+            <p id="weeklyTopProblemValue" class="analytics-highlight-value">Loading...</p>
+        </div>
+
+        <div id="weeklyStats">
+            <p>Loading weekly analytics...</p>
+        </div>
+
+    </div>
+
+
+    <div id="mostComplaintsPage" class="analytics-page" style="display:none;">
+
+        <div class="analytics-page-header">
+            <div>
+                <h2>🏆 Most Complaints</h2>
+                <p>Most reported problem categories</p>
+            </div>
+            <button class="analytics-page-close" onclick="closeAnalyticsPage()">✕</button>
+        </div>
+
+        <div id="mostComplaintsStats">
+            <p>Loading...</p>
+        </div>
+
+    </div>
+
+
+    <div id="monthlyAnalyticsPage" class="analytics-page" style="display:none;">
+
+        <div class="analytics-page-header">
+            <div>
+                <h2>📅 Monthly Analytics</h2>
+                <p id="monthlyPageMonth">Current month and previous month history</p>
+            </div>
+            <button class="analytics-page-close" onclick="closeAnalyticsPage()">✕</button>
+        </div>
+
+        <div class="monthly-page-grid">
+
+            <div class="monthly-page-card">
+                <h3>Monthly Problem Analytics</h3>
+                <p>Top reported problem categories this month</p>
+                <div id="monthlyStats">
+                    <p>Loading monthly analytics...</p>
+                </div>
+            </div>
+
+            <div class="monthly-page-card">
+                <h3>Monthly History</h3>
+                <p>Previous completed months</p>
+                <div id="monthlyHistory">
+                    <p>Loading monthly history...</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
 
 
@@ -643,7 +1171,248 @@ function getComplaintDate(complaint) {
 
 }
 
+/* ==========================================
+   DUPLICATE PROBLEM DETECTOR
+========================================== */
 
+async function loadDuplicateProblems() {
+
+    const container =
+        document.getElementById(
+            "duplicateProblemsStats"
+        );
+
+    container.innerHTML =
+        "<p>Loading duplicate problems...</p>";
+
+    try {
+
+        const response =
+            await fetch("/same-problems");
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+            throw new Error(
+                "Duplicate problem data not found"
+            );
+        }
+
+        if (
+            !data.groups ||
+            data.groups.length === 0
+        ) {
+
+            container.innerHTML = `
+                <div class="duplicate-alert">
+                    ✅ No duplicated problems found.
+                </div>
+            `;
+
+            return;
+        }
+
+        let html = `
+            <div class="duplicate-alert">
+                ⚠️ Duplicated Problem Detected
+            </div>
+        `;
+
+        data.groups.forEach(
+            (group, groupIndex) => {
+
+                html += `
+                    <div class="duplicate-group">
+
+                        <div class="duplicate-group-header">
+
+                            <h3>
+                                ⚠️ ${group.category} — ${group.location}
+                            </h3>
+
+                            <p>
+                                <b>
+                                    ${group.count} Students reported this problem
+                                </b>
+                            </p>
+
+                        </div>
+                `;
+
+                group.complaints.forEach(
+                    (complaint, complaintIndex) => {
+
+                        html += `
+                            <div class="duplicate-complaint-card">
+
+                                <h4>
+                                    Complaint ${complaintIndex + 1}: ${complaint.title}
+                                </h4>
+
+                                <p>
+                                    <b>Complaint ID:</b>
+                                    ${complaint.complaintId || "Old Complaint"}
+                                </p>
+
+                                <p>
+                                    <b>Category:</b>
+                                    ${complaint.category}
+                                </p>
+
+                                <p>
+                                    <b>Location:</b>
+                                    ${complaint.location}
+                                </p>
+
+                                <p>
+                                    <b>Description:</b>
+                                    ${complaint.description}
+                                </p>
+
+                                <p>
+                                    <b>Priority:</b>
+                                    ${complaint.priority}
+                                </p>
+
+                                <p>
+                                    <b>Status:</b>
+                                    ${complaint.status}
+                                </p>
+
+                            </div>
+                        `;
+
+                    }
+                );
+
+                const ids =
+                    JSON.stringify(
+                        group.complaints.map(
+                            complaint => complaint._id
+                        )
+                    );
+
+                html += `
+                        <button
+                            class="duplicate-resolve-btn"
+                            onclick='resolveDuplicateProblems(${ids})'
+                        >
+                            ✅ Resolve All ${group.count} Complaints
+                        </button>
+
+                    </div>
+                `;
+
+            }
+        );
+
+        container.innerHTML = html;
+
+    } catch (error) {
+
+        console.log(
+            "Duplicate Detector Error:",
+            error
+        );
+
+        container.innerHTML = `
+            <p>
+                Failed to load duplicate problems.
+            </p>
+        `;
+
+    }
+
+}
+
+
+async function resolveDuplicateProblems(
+    complaintIds
+) {
+
+    if (
+        !confirm(
+`Resolve all ${complaintIds.length} complaints in this duplicated problem?`        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                "/same-problems/resolve",
+                {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            complaintIds:
+                                complaintIds
+                        })
+
+                }
+            );
+
+        const result =
+            await response.json();
+
+        alert(
+            result.message
+        );
+
+        await loadComplaints();
+
+        await loadDuplicateProblems();
+
+    } catch (error) {
+
+        console.log(
+            "Duplicate Resolve Error:",
+            error
+        );
+
+        alert(
+            "Failed to resolve duplicate complaints."
+        );
+
+    }
+
+}
+
+
+function toggleDuplicateProblems() {
+
+    const box =
+        document.getElementById(
+            "duplicateProblemsBox"
+        );
+
+    if (
+        box.style.display === "none" ||
+        box.style.display === ""
+    ) {
+
+        box.style.display =
+            "block";
+
+        loadDuplicateProblems();
+
+    } else {
+
+        box.style.display =
+            "none";
+
+    }
+
+}
 
 /* ==========================================
    WEEKLY ANALYTICS
@@ -658,7 +1427,7 @@ function showWeeklyAnalytics(complaints) {
 
     const dateRange =
         document.querySelector(
-            "#weeklyDateRange"
+            "#weeklyPageDateRange"
         );
 
 
@@ -818,6 +1587,8 @@ function showWeeklyAnalytics(complaints) {
 
     const dailyCounts = [];
 
+    const weeklyCategoryCounts = {};
+
     let currentDate =
         new Date(startDate);
 
@@ -864,6 +1635,12 @@ function showWeeklyAnalytics(complaints) {
                 complaintDate <= endDate
             ) {
 
+                const category =
+                    complaint.category || "Other";
+
+                weeklyCategoryCounts[category] =
+                    (weeklyCategoryCounts[category] || 0) + 1;
+
                 const matchingDay =
                     dailyCounts.find(
                         day => {
@@ -908,6 +1685,39 @@ function showWeeklyAnalytics(complaints) {
 
         }
     );
+
+
+    /* MOST REPORTED PROBLEM */
+
+    const weeklyCategories =
+        Object.entries(weeklyCategoryCounts)
+            .sort((a, b) => b[1] - a[1]);
+
+    const topProblemValue =
+        document.querySelector(
+            "#weeklyTopProblemValue"
+        );
+
+    if (topProblemValue) {
+
+        if (weeklyCategories.length === 0) {
+
+            topProblemValue.textContent =
+                "No complaints in this period.";
+
+        }
+
+        else {
+
+            const [topCategory, topCount] =
+                weeklyCategories[0];
+
+            topProblemValue.textContent =
+                `${topCategory} — ${topCount} complaint${topCount !== 1 ? "s" : ""}`;
+
+        }
+
+    }
 
 
     /* DISPLAY */
@@ -1124,69 +1934,213 @@ function showMostComplaints(
 
 
 /* ==========================================
-   WEEKLY TOGGLE
+   ANALYTICS PAGE OPEN / CLOSE
 ========================================== */
 
-function toggleWeeklyAnalytics() {
+function openAnalyticsPage(page) {
 
-    const box =
+    const overlay =
         document.getElementById(
-            "weeklyAnalyticsBox"
+            "analyticsPageOverlay"
         );
 
+    const weeklyPage =
+        document.getElementById(
+            "weeklyAnalyticsPage"
+        );
 
-    if (
-        box.style.display === "none" ||
-        box.style.display === ""
-    ) {
+    const mostPage =
+        document.getElementById(
+            "mostComplaintsPage"
+        );
 
-        box.style.display =
-            "block";
+    const monthlyPage =
+        document.getElementById(
+            "monthlyAnalyticsPage"
+        );
 
+    weeklyPage.style.display = "none";
+    mostPage.style.display = "none";
+    monthlyPage.style.display = "none";
+
+    overlay.style.display = "block";
+
+    if (page === "weekly") {
+        weeklyPage.style.display = "block";
     }
 
-    else {
+    else if (page === "most") {
+        mostPage.style.display = "block";
+    }
 
-        box.style.display =
-            "none";
-
+    else if (page === "monthly") {
+        monthlyPage.style.display = "block";
+        loadMonthlyAnalytics();
     }
 
 }
 
+
+function closeAnalyticsPage() {
+
+    document.getElementById(
+        "analyticsPageOverlay"
+    ).style.display = "none";
+
+}
 
 
 /* ==========================================
-   MOST COMPLAINTS TOGGLE
+   MONTHLY ANALYTICS
 ========================================== */
 
-function toggleMostComplaints() {
+async function loadMonthlyAnalytics() {
 
-    const box =
+    const stats =
         document.getElementById(
-            "mostComplaintsBox"
+            "monthlyStats"
         );
 
+    const history =
+        document.getElementById(
+            "monthlyHistory"
+        );
 
-    if (
-        box.style.display === "none" ||
-        box.style.display === ""
-    ) {
+    const monthLabel =
+        document.getElementById(
+            "monthlyPageMonth"
+        );
 
-        box.style.display =
-            "block";
+    try {
+
+        const response =
+            await fetch(
+                "/analytics/monthly"
+            );
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+            throw new Error(
+                "Monthly analytics could not be loaded."
+            );
+        }
+
+        const current =
+            data.currentMonth || {};
+
+        if (monthLabel) {
+
+            monthLabel.textContent =
+                current.month
+                    ? `Current month: ${current.month}`
+                    : "Current month";
+
+        }
+
+        stats.innerHTML = "";
+
+        const top5 =
+            current.top5 || [];
+
+        if (top5.length === 0) {
+
+            stats.innerHTML =
+                "<p>No complaints in this month.</p>";
+
+        }
+
+        else {
+
+            top5.forEach(
+                item => {
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+                    row.className =
+                        "monthly-item";
+
+                    row.innerHTML = `
+                        <b>${item.category}</b>
+                        <span>
+                            ${item.count}
+                            complaint${item.count !== 1 ? "s" : ""}
+                        </span>
+                    `;
+
+                    stats.appendChild(row);
+
+                }
+            );
+
+        }
+
+        history.innerHTML = "";
+
+        const monthlyHistory =
+            data.history || [];
+
+        if (monthlyHistory.length === 0) {
+
+            history.innerHTML =
+                "<p>No previous month history yet.</p>";
+
+        }
+
+        else {
+
+            monthlyHistory.forEach(
+                item => {
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+                    row.className =
+                        "history-item";
+
+                    row.innerHTML = `
+                        <h4>${item.monthLabel || item.month || "Month"}</h4>
+                        <p>
+                            Top Problem:
+                            <b>${item.topCategory}</b>
+                        </p>
+                        <p>
+                            Complaints:
+                            ${item.complaintCount}
+                        </p>
+                    `;
+
+                    history.appendChild(row);
+
+                }
+            );
+
+        }
 
     }
 
-    else {
+    catch (error) {
 
-        box.style.display =
-            "none";
+        console.log(
+            "MONTHLY ANALYTICS ERROR:",
+            error
+        );
+
+        stats.innerHTML =
+            "<p>Unable to load monthly analytics.</p>";
+
+        history.innerHTML =
+            "<p>Unable to load monthly history.</p>";
 
     }
 
 }
-
 
 
 /* ==========================================
@@ -1470,11 +2424,9 @@ async function loadComplaints() {
 
 
                                 <img
-                                    src="/${complaint.photo}"
+                                    src="${complaint.photo}"
                                     onclick="
-                                        openPhoto(
-                                            '/${complaint.photo}'
-                                        )
+                                    openPhoto('${complaint.photo}')
                                     "
                                 >
 
@@ -1606,61 +2558,62 @@ async function updateStatus(
    FILTER COMPLAINTS
 ========================================== */
 
-function filterComplaints(
-    status
-) {
+let activeFilter = null;
+
+function filterComplaints(status) {
 
     const container =
-        document.querySelector(
-            "#complaints"
-        );
-
+        document.querySelector("#complaints");
 
     const cards =
-        document.querySelectorAll(
-            "#complaints > div"
-        );
+        document.querySelectorAll("#complaints > div");
 
 
-    /*
-       Show complaint section
-    */
+    /* Same button clicked again → close */
 
-    container.style.display =
-        "block";
+    if (activeFilter === status) {
+
+        container.style.display = "none";
+
+        cards.forEach(card => {
+            card.style.display = "none";
+        });
+
+        activeFilter = null;
+
+        return;
+    }
 
 
-    cards.forEach(
-        card => {
+    /* New filter → open */
 
-            const cardStatus =
-                card.getAttribute(
-                    "data-status"
-                );
+    activeFilter = status;
+
+    container.style.display = "block";
 
 
-            if (
-                status === "All" ||
-                cardStatus === status
-            ) {
+    cards.forEach(card => {
 
-                card.style.display =
-                    "block";
+        const cardStatus =
+            card.getAttribute("data-status");
 
-            }
 
-            else {
+        if (
+            status === "All" ||
+            cardStatus === status
+        ) {
 
-                card.style.display =
-                    "none";
+            card.style.display = "block";
 
-            }
+        } else {
+
+            card.style.display = "none";
 
         }
-    );
+
+    });
 
 }
-
 
 
 /* ==========================================

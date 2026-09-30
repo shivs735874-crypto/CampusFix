@@ -5,11 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Dashboard - CampusFix</title>
+    <title>Student Dashboard - CampusFix 2.0</title>
 
     <link rel="stylesheet" href="style.css">
 
     <style>
+
+        /* Dashboard Heading */
+
+        .dashboard-header {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(10px);
+        }
+
+        .dashboard-header h1 {
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .dashboard-header h2 {
+            margin-top: 10px;
+        }
+
+
+        /* Stats */
 
         .stats div {
             cursor: pointer;
@@ -20,8 +42,75 @@
             transform: translateY(-5px);
         }
 
+
+        /* Complaint Popup */
+
+        .complaints-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 90%;
+            max-width: 750px;
+            max-height: 80vh;
+
+            overflow-y: auto;
+
+            padding: 25px;
+            border-radius: 18px;
+
+            background: rgba(20, 20, 35, 0.96);
+            backdrop-filter: blur(12px);
+
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.45);
+
+            z-index: 1000;
+        }
+
+
+        /* Close Button */
+
+        .close-button {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+
+            width: 35px;
+            height: 35px;
+
+            border: none;
+            border-radius: 50%;
+
+            font-size: 20px;
+            cursor: pointer;
+
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+
+        /* Complaint Filter Buttons */
+
+        .complaint-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .complaint-filters button {
+            cursor: pointer;
+            padding: 9px 15px;
+            border-radius: 10px;
+            border: none;
+        }
+
+
+        /* Complaint Card */
+
         .complaint-card {
-            margin-top: 20px;
+            margin-top: 15px;
             padding: 20px;
             border-radius: 15px;
             background: rgba(255, 255, 255, 0.08);
@@ -39,9 +128,50 @@
         .priority {
             font-weight: bold;
         }
+.complaint-card p {
+    margin: 10px 0;
+}
 
-        #filterTitle {
-            margin-top: 30px;
+.complaint-id {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.status-pending {
+    background: rgba(255, 193, 7, 0.45);
+}
+
+.status-progress {
+    background: rgba(33, 150, 243, 0.45);
+}
+
+.status-resolved {
+    background: rgba(76, 175, 80, 0.45);
+}
+
+        /* Background overlay */
+
+        .panel-overlay {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.55);
+
+            z-index: 999;
         }
 
     </style>
@@ -52,21 +182,36 @@
 
     <div class="container">
 
-        <h1>Student Dashboard</h1>
 
-        <h2>Welcome to CampusFix 👋</h2>
+        <!-- Dashboard Header -->
 
-        <p>Track and manage your college complaints.</p>
+        <div class="dashboard-header">
 
+            <h1>Student Dashboard</h1>
+
+            <h2 id="welcomeMessage">
+                Welcome to CampusFix 2.0 👋
+            </h2>
+
+            <p>
+                Track and manage your college complaints.
+            </p>
+
+        </div>
+
+
+        <!-- Main Buttons -->
 
         <div class="dashboard-buttons">
 
-            <button onclick="showComplaints('All')">
+            <button onclick="openComplaintsPanel('All')">
                 My Complaints
             </button>
 
             <a href="report-problem.html">
-                <button>Report New Problem</button>
+                <button>
+                    Report New Problem
+                </button>
             </a>
 
         </div>
@@ -76,37 +221,118 @@
 
         <div class="stats">
 
-            <div onclick="showComplaints('All')">
+            <div onclick="openComplaintsPanel('All')">
+
                 <h2 id="totalCount">0</h2>
-                <p>Total Complaints</p>
+
+                <p>
+                    Total Complaints
+                </p>
+
             </div>
 
-            <div onclick="showComplaints('Pending')">
+
+            <div onclick="openComplaintsPanel('Pending')">
+
                 <h2 id="pendingCount">0</h2>
-                <p>Pending</p>
+
+                <p>
+                    Pending
+                </p>
+
             </div>
 
-            <div onclick="showComplaints('In Progress')">
+
+            <div onclick="openComplaintsPanel('In Progress')">
+
                 <h2 id="progressCount">0</h2>
-                <p>In Progress</p>
+
+                <p>
+                    In Progress
+                </p>
+
             </div>
 
-            <div onclick="showComplaints('Resolved')">
+
+            <div onclick="openComplaintsPanel('Resolved')">
+
                 <h2 id="resolvedCount">0</h2>
-                <p>Resolved</p>
+
+                <p>
+                    Resolved
+                </p>
+
             </div>
 
         </div>
 
 
-        <h2 id="filterTitle">My Complaints</h2>
+        <!-- Overlay -->
 
-        <div id="complaintsList"></div>
+        <div
+            id="panelOverlay"
+            class="panel-overlay"
+            onclick="closeComplaintsPanel()">
+        </div>
+
+
+        <!-- Complaints Panel -->
+
+        <div
+            id="complaintsPanel"
+            class="complaints-panel">
+
+
+            <!-- Close -->
+
+            <button
+                class="close-button"
+                onclick="closeComplaintsPanel()">
+                ✕
+            </button>
+
+
+            <h2 id="filterTitle">
+                My Complaints
+            </h2>
+
+
+            <!-- Filters -->
+
+            <div class="complaint-filters">
+
+                <button onclick="showComplaints('All')">
+                    All
+                </button>
+
+                <button onclick="showComplaints('Pending')">
+                    Pending
+                </button>
+
+                <button onclick="showComplaints('In Progress')">
+                    In Progress
+                </button>
+
+                <button onclick="showComplaints('Resolved')">
+                    Resolved
+                </button>
+
+            </div>
+
+
+            <!-- Complaints -->
+
+            <div id="complaintsList"></div>
+
+        </div>
 
 
         <p>
-            <a href="index.html">Back to Home</a>
+            <a href="index.html">
+                Back to Home
+            </a>
         </p>
+
 
     </div>
 
@@ -116,68 +342,111 @@
         let myComplaints = [];
 
 
+        // Load Student Complaints
+
         async function loadStudentComplaints() {
 
             try {
 
-                const studentId = localStorage.getItem("studentId");
+                const studentId =
+                    localStorage.getItem("studentId");
+
+                const studentName =
+                    localStorage.getItem("studentName");
+
 
                 if (!studentId) {
 
                     alert("Please login first!");
 
-                    window.location.href = "login.html";
+                    window.location.href =
+                        "login.html";
 
                     return;
 
                 }
 
 
-                const response = await fetch(
-                   "/complaints"
-                );
+                // Dynamic Welcome Message
 
-                const complaints = await response.json();
+                document.getElementById(
+                    "welcomeMessage"
+                ).textContent =
+                    "Welcome to CampusFix 2.0, " +
+                    (studentName || "Student") +
+                    " 👋";
+
+
+                const response =
+                    await fetch("/complaints");
+
+
+                const complaints =
+                    await response.json();
 
 
                 // Only logged-in student's complaints
 
-                myComplaints = complaints.filter(
-                    complaint => complaint.studentId === studentId
-                );
+                myComplaints =
+                    complaints.filter(
+                        complaint =>
+                            complaint.studentId === studentId
+                    );
 
 
                 // Calculate statistics
 
-                const total = myComplaints.length;
+                const total =
+                    myComplaints.length;
 
-                const pending = myComplaints.filter(
-                    complaint => complaint.status === "Pending"
-                ).length;
 
-                const progress = myComplaints.filter(
-                    complaint => complaint.status === "In Progress"
-                ).length;
+                const pending =
+                    myComplaints.filter(
+                        complaint =>
+                            complaint.status === "Pending"
+                    ).length;
 
-                const resolved = myComplaints.filter(
-                    complaint => complaint.status === "Resolved"
-                ).length;
+
+                const progress =
+                    myComplaints.filter(
+                        complaint =>
+                            complaint.status === "In Progress"
+                    ).length;
+
+
+                const resolved =
+                    myComplaints.filter(
+                        complaint =>
+                            complaint.status === "Resolved"
+                    ).length;
 
 
                 // Display statistics
 
-                document.getElementById("totalCount").textContent = total;
-
-                document.getElementById("pendingCount").textContent = pending;
-
-                document.getElementById("progressCount").textContent = progress;
-
-                document.getElementById("resolvedCount").textContent = resolved;
+                document.getElementById(
+                    "totalCount"
+                ).textContent = total;
 
 
-                // Show all complaints initially
+                document.getElementById(
+                    "pendingCount"
+                ).textContent = pending;
 
-                displayComplaints(myComplaints, "My Complaints");
+
+                document.getElementById(
+                    "progressCount"
+                ).textContent = progress;
+
+
+                document.getElementById(
+                    "resolvedCount"
+                ).textContent = resolved;
+
+
+                /*
+                    Complaints are NOT displayed automatically.
+                    Student must click My Complaints or a statistic card.
+                */
 
 
             } catch (error) {
@@ -192,16 +461,63 @@
         }
 
 
-        function displayComplaints(complaints, title) {
+        // Open Complaints Panel
+
+        function openComplaintsPanel(status) {
+
+            document.getElementById(
+                "complaintsPanel"
+            ).style.display = "block";
+
+
+            document.getElementById(
+                "panelOverlay"
+            ).style.display = "block";
+
+
+            showComplaints(status);
+
+        }
+
+
+        // Close Complaints Panel
+
+        function closeComplaintsPanel() {
+
+            document.getElementById(
+                "complaintsPanel"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "panelOverlay"
+            ).style.display = "none";
+
+        }
+
+
+        // Display Complaints
+
+        function displayComplaints(
+            complaints,
+            title
+        ) {
 
             const list =
-                document.getElementById("complaintsList");
+                document.getElementById(
+                    "complaintsList"
+                );
+
 
             const filterTitle =
-                document.getElementById("filterTitle");
+                document.getElementById(
+                    "filterTitle"
+                );
 
 
-            filterTitle.textContent = title;
+            filterTitle.textContent =
+                title;
+
 
             list.innerHTML = "";
 
@@ -216,53 +532,82 @@
             }
 
 
-            complaints.forEach(complaint => {
+            complaints.forEach(
+                complaint => {
 
-                const card =
-                    document.createElement("div");
-
-
-                card.className = "complaint-card";
-
-
-                card.innerHTML = `
-
-                    <h3>${complaint.title}</h3>
-
-                    <p>
-                        <b>Complaint ID:</b>
-                        ${complaint.complaintId || "ID not available"}
-                    </p>
-
-                    <p>
-                        <b>Category:</b>
-                        ${complaint.category}
-                    </p>
-
-                    <p>
-                        <b>Location:</b>
-                        ${complaint.location}
-                    </p>
-
-                    <p class="priority">
-                        <b>Priority:</b>
-                        ${complaint.priority}
-                    </p>
-
-                    <p class="status">
-                        <b>Status:</b>
-                        ${complaint.status}
-                    </p>
-
-                `;
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
 
 
-                list.appendChild(card);
+                    card.className =
+                        "complaint-card";
 
-            });
+card.innerHTML = `
+
+    <h3>
+        ${complaint.title}
+    </h3>
+
+    <p>
+        <b>Complaint ID:</b>
+        <span class="complaint-id">
+            🆔 ${complaint.complaintId || "ID not available"}
+        </span>
+    </p>
+
+    <p>
+        <b>Category:</b>
+        ${complaint.category}
+    </p>
+
+    <p>
+        <b>Location:</b>
+        ${complaint.location}
+    </p>
+
+    <p>
+        <b>Submitted Date:</b>
+        ${complaint.createdAt
+            ? new Date(complaint.createdAt).toLocaleDateString("en-IN")
+            : "Date not available"}
+    </p>
+
+    <p class="priority">
+        <b>Priority:</b>
+        ${complaint.priority}
+    </p>
+
+    <p class="status">
+        <b>Status:</b>
+
+        <span class="status-badge ${
+            complaint.status === "Pending"
+                ? "status-pending"
+                : complaint.status === "In Progress"
+                    ? "status-progress"
+                    : "status-resolved"
+        }">
+
+            ● ${complaint.status}
+
+        </span>
+
+    </p>
+
+`;
+
+
+                    list.appendChild(card);
+
+                }
+            );
 
         }
 
+
+        // Filter Complaints
 
         function showComplaints(status) {
 
@@ -292,17 +637,10 @@
                     : status + " Complaints"
             );
 
-
-            document
-                .getElementById("complaintsList")
-                .scrollIntoView({
-                    behavior: "smooth"
-                });
-
         }
 
 
-        // Load complaints when dashboard opens
+        // Load Dashboard
 
         loadStudentComplaints();
 
