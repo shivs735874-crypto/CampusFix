@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Track Complaints - CampusFix</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .track-page {
+            max-width: 700px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        .track-search {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .track-search input {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .track-search button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #trackResult {
+            margin-top: 35px;
+        }
+
+      .track-card {
+    padding: 25px;
+    border-radius: 12px;
+    background: #151f33;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    text-align: left;
+}
+
+        .track-card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+       .track-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #39445c;
+    color: white;
+}
+
+      .track-not-found {
+    padding: 20px;
+    border-radius: 10px;
+    background: #151f33;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+        .back-dashboard {
+            margin-top: 35px;
+        }
+
+        @media (max-width: 600px) {
+
+            .track-search {
+                flex-direction: column;
+            }
+
+            .track-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <div class="track-page">
+
+        <h1>Track Complaints</h1>
+
+        <p>Enter Complaint ID to find complaint details</p>
+
+
+        <div class="track-search">
+
+            <input
+                type="text"
+                id="complaintId"
+                placeholder="Complaint ID"
+                autocomplete="off"
+                autofocus
+            >
+
+            <button onclick="trackComplaint()">
+                Search
+            </button>
+
+        </div>
+
+
+        <div id="trackResult"></div>
+
+
+        <div class="back-dashboard">
+
+            <button
+                onclick="window.location.href='admin-dashboard.html'"
+            >
+                Back to Dashboard
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+async function trackComplaint() {
+
+    const input =
+        document.getElementById("complaintId");
+
+    const result =
+        document.getElementById("trackResult");
+
+    const complaintId =
+        input.value.trim();
+
+
+    if (!complaintId) {
+
+        result.innerHTML = `
+            <div class="track-not-found">
+                Please enter Complaint ID
+            </div>
+        `;
+
+        return;
+    }
+
+
+    result.innerHTML = `
+        <p>Searching...</p>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/track-complaint/${encodeURIComponent(complaintId)}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            result.innerHTML = `
+                <div class="track-not-found">
+                    Complaint Not Found
+                </div>
+            `;
+
+            return;
+        }
+
+
+        result.innerHTML = `
+
+            <div class="track-card">
+
+                <h2>Complaint Found</h2>
+
+
+                <div class="track-row">
+
+                    <b>Student Name</b>
+
+                    <span>
+                        ${data.studentName}
+                    </span>
+
+                </div>
+
+
+                <div class="track-row">
+
+                    <b>Roll Number</b>
+
+                    <span>
+                        ${data.rollNumber}
+                    </span>
+
+                </div>
+
+
+                <div class="track-row">
+
+                    <b>Complaint ID</b>
+
+                    <span>
+                        ${data.complaintId}
+                    </span>
+
+                </div>
+
+
+                <div class="track-row">
+
+                    <b>Total Complaints</b>
+
+                    <span>
+                        ${data.totalComplaints}
+                    </span>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+    } catch (error) {
+
+        console.log(
+            "Track Complaint Error:",
+            error
+        );
+
+
+        result.innerHTML = `
+
+            <div class="track-not-found">
+
+                Unable to search complaint.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+document
+    .getElementById("complaintId")
+    .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+
+            trackComplaint();
+
+        }
+
+    });
+
+</script>
+
+
+</body>
+
+</html>

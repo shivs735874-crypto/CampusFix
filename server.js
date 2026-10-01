@@ -174,6 +174,90 @@ app.get("/complaints", async (req, res) => {
         });
     }
 });
+// ==========================================
+// TRACK COMPLAINT
+// ==========================================
+
+app.get("/track-complaint/:complaintId", async (req, res) => {
+
+    try {
+
+        const complaintId =
+            req.params.complaintId.trim();
+
+        // Find complaint
+        const complaint =
+            await Complaint.findOne({
+                complaintId: complaintId
+            });
+
+        if (!complaint) {
+
+            return res.json({
+                success: false,
+                message: "Complaint Not Found"
+            });
+
+        }
+
+
+        // Find student using studentId
+        const student =
+            await Student.findOne({
+                studentId: complaint.studentId
+            });
+
+
+        if (!student) {
+
+            return res.json({
+                success: false,
+                message: "Student Not Found"
+            });
+
+        }
+
+
+        // Count all complaints of this student
+        const totalComplaints =
+            await Complaint.countDocuments({
+                studentId: complaint.studentId
+            });
+
+
+        res.json({
+
+            success: true,
+
+            studentName: student.name,
+
+            rollNumber: student.studentId,
+
+            complaintId: complaint.complaintId,
+
+            totalComplaints: totalComplaints
+
+        });
+
+
+    } catch (error) {
+
+        console.log(
+            "Track Complaint Error:",
+            error
+        );
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Failed to track complaint"
+
+        });
+
+    }
+
+});
 async function ensureMonthlyHistory() {
 
     const now = new Date();
