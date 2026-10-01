@@ -979,36 +979,7 @@
              FILTERS + BACK HOME
         =================================== -->
 
-        <div class="admin-filter-row">
-
-            <div class="admin-filter-buttons">
-
-                <button
-                    onclick="filterComplaints('All')"
-                >
-                    All
-                </button>
-
-                <button
-                    onclick="filterComplaints('Pending')"
-                >
-                    Pending
-                </button>
-
-                <button
-                    onclick="filterComplaints('In Progress')"
-                >
-                    In Progress
-                </button>
-
-                <button
-                    onclick="filterComplaints('Resolved')"
-                >
-                    Resolved
-                </button>
-
-            </div>
-
+       
 
             <button
                 class="admin-home-btn"
@@ -2250,9 +2221,8 @@ async function loadComplaints() {
            Complaints stay hidden
            until admin clicks a filter.
         */
-
-        container.style.display =
-            "none";
+container.style.display =
+    "none";
 
 
         complaints.forEach(
@@ -2531,9 +2501,7 @@ async function updateStatus(
            after status update.
         */
 
-        filterComplaints(
-            status
-        );
+      
 
     }
 
