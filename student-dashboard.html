@@ -10,9 +10,7 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-
         /* Dashboard Heading */
-
         .dashboard-header {
             margin-bottom: 25px;
             padding: 20px;
@@ -30,9 +28,7 @@
             margin-top: 10px;
         }
 
-
         /* Stats */
-
         .stats div {
             cursor: pointer;
             transition: 0.3s;
@@ -42,61 +38,88 @@
             transform: translateY(-5px);
         }
 
-
-        /* Complaint Popup */
-
+        /* FULL SCREEN COMPLAINT PANEL */
         .complaints-panel {
             display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
 
-            width: 90%;
-            max-width: 750px;
-            max-height: 80vh;
+            position: fixed !important;
+            inset: 0 !important;
 
-            overflow-y: auto;
+            width: 100vw !important;
+            height: 100vh !important;
 
-            padding: 25px;
-            border-radius: 18px;
+            max-width: none !important;
+            max-height: none !important;
 
-            background: rgba(20, 20, 35, 0.96);
+            margin: 0 !important;
+            padding: 0 !important;
+
+            box-sizing: border-box !important;
+
+            overflow: hidden !important;
+
+            border-radius: 0 !important;
+            transform: none !important;
+
+            background: rgba(20, 20, 35, 0.99);
             backdrop-filter: blur(12px);
 
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.45);
+            box-shadow: none !important;
 
-            z-index: 1000;
+            z-index: 100000 !important;
         }
 
+        /* Fixed header inside fullscreen panel */
+        .complaints-panel-header {
+            position: sticky;
+            top: 0;
+            z-index: 100002;
 
-        /* Close Button */
+            padding: 22px 6% 16px;
 
+            background: rgba(20, 20, 35, 0.98);
+            backdrop-filter: blur(14px);
+        }
+
+        .complaints-panel-header h2 {
+            margin: 0 50px 16px 0;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        /* Fixed close button */
         .close-button {
-            position: absolute;
-            top: 12px;
-            right: 15px;
+            position: fixed !important;
+            top: 18px !important;
+            right: 25px !important;
 
-            width: 35px;
-            height: 35px;
+            width: 42px !important;
+            height: 42px !important;
 
             border: none;
             border-radius: 50%;
 
-            font-size: 20px;
+            font-size: 24px;
+            line-height: 42px;
+
             cursor: pointer;
 
             background: rgba(255, 255, 255, 0.15);
+            color: white;
+
+            z-index: 100005 !important;
         }
 
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
 
         /* Complaint Filter Buttons */
-
         .complaint-filters {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin: 20px 0;
+            margin: 0;
         }
 
         .complaint-filters button {
@@ -106,9 +129,17 @@
             border: none;
         }
 
+        /* Scroll area - only complaints scroll */
+        .complaints-scroll-area {
+            height: calc(100vh - 135px);
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            padding: 0 6% 50px;
+            box-sizing: border-box;
+        }
 
         /* Complaint Card */
-
         .complaint-card {
             margin-top: 15px;
             padding: 20px;
@@ -121,6 +152,20 @@
             margin-top: 0;
         }
 
+        .complaint-card p {
+            margin: 10px 0;
+        }
+
+        .complaint-id {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
         .status {
             font-weight: bold;
         }
@@ -128,65 +173,49 @@
         .priority {
             font-weight: bold;
         }
-.complaint-card p {
-    margin: 10px 0;
-}
 
-.complaint-id {
-    display: inline-block;
-    margin-top: 5px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.15);
-    font-size: 14px;
-    font-weight: bold;
-}
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
 
-.status-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-weight: bold;
-}
+        .status-pending {
+            background: rgba(255, 193, 7, 0.45);
+        }
 
-.status-pending {
-    background: rgba(255, 193, 7, 0.45);
-}
+        .status-progress {
+            background: rgba(33, 150, 243, 0.45);
+        }
 
-.status-progress {
-    background: rgba(33, 150, 243, 0.45);
-}
-
-.status-resolved {
-    background: rgba(76, 175, 80, 0.45);
-}
+        .status-resolved {
+            background: rgba(76, 175, 80, 0.45);
+        }
 
         /* Background overlay */
-
         .panel-overlay {
             display: none;
 
-            position: fixed;
-            inset: 0;
+            position: fixed !important;
+            inset: 0 !important;
 
-            background: rgba(0, 0, 0, 0.55);
+            width: 100vw !important;
+            height: 100vh !important;
 
-            z-index: 999;
+            background: rgba(0, 0, 0, 0.65);
+
+            z-index: 99999 !important;
         }
-
     </style>
-
 </head>
 
 <body>
 
     <div class="container">
 
-
         <!-- Dashboard Header -->
-
         <div class="dashboard-header">
-
             <h1>Student Dashboard</h1>
 
             <h2 id="welcomeMessage">
@@ -196,12 +225,9 @@
             <p>
                 Track and manage your college complaints.
             </p>
-
         </div>
 
-
         <!-- Main Buttons -->
-
         <div class="dashboard-buttons">
 
             <button onclick="openComplaintsPanel('All')">
@@ -216,116 +242,78 @@
 
         </div>
 
-
         <!-- Statistics -->
-
         <div class="stats">
 
             <div onclick="openComplaintsPanel('All')">
-
                 <h2 id="totalCount">0</h2>
-
-                <p>
-                    Total Complaints
-                </p>
-
+                <p>Total Complaints</p>
             </div>
-
 
             <div onclick="openComplaintsPanel('Pending')">
-
                 <h2 id="pendingCount">0</h2>
-
-                <p>
-                    Pending
-                </p>
-
+                <p>Pending</p>
             </div>
-
 
             <div onclick="openComplaintsPanel('In Progress')">
-
                 <h2 id="progressCount">0</h2>
-
-                <p>
-                    In Progress
-                </p>
-
+                <p>In Progress</p>
             </div>
 
-
             <div onclick="openComplaintsPanel('Resolved')">
-
                 <h2 id="resolvedCount">0</h2>
-
-                <p>
-                    Resolved
-                </p>
-
+                <p>Resolved</p>
             </div>
 
         </div>
 
-
         <!-- Overlay -->
-
         <div
             id="panelOverlay"
             class="panel-overlay"
             onclick="closeComplaintsPanel()">
         </div>
 
-
         <!-- Complaints Panel -->
+        <div id="complaintsPanel" class="complaints-panel">
 
-        <div
-            id="complaintsPanel"
-            class="complaints-panel">
+            <div class="complaints-panel-header">
 
-
-            <!-- Close -->
-
-            <button
-                class="close-button"
-                onclick="closeComplaintsPanel()">
-                ✕
-            </button>
-
-
-            <h2 id="filterTitle">
-                My Complaints
-            </h2>
-
-
-            <!-- Filters -->
-
-            <div class="complaint-filters">
-
-                <button onclick="showComplaints('All')">
-                    All
+                <button
+                    class="close-button"
+                    onclick="closeComplaintsPanel()">
+                    ✕
                 </button>
 
-                <button onclick="showComplaints('Pending')">
-                    Pending
-                </button>
+                <h2 id="filterTitle">
+                    My Complaints
+                </h2>
 
-                <button onclick="showComplaints('In Progress')">
-                    In Progress
-                </button>
+                <div class="complaint-filters">
+                    <button onclick="showComplaints('All')">
+                        All
+                    </button>
 
-                <button onclick="showComplaints('Resolved')">
-                    Resolved
-                </button>
+                    <button onclick="showComplaints('Pending')">
+                        Pending
+                    </button>
+
+                    <button onclick="showComplaints('In Progress')">
+                        In Progress
+                    </button>
+
+                    <button onclick="showComplaints('Resolved')">
+                        Resolved
+                    </button>
+                </div>
 
             </div>
 
-
-            <!-- Complaints -->
-
-            <div id="complaintsList"></div>
+            <div class="complaints-scroll-area">
+                <div id="complaintsList"></div>
+            </div>
 
         </div>
-
 
         <p>
             <a href="index.html">
@@ -333,17 +321,18 @@
             </a>
         </p>
 
-
     </div>
 
-
     <script>
-
         let myComplaints = [];
 
+        /* Keep original location so the panel can return there after closing */
+        const complaintsPanel = document.getElementById("complaintsPanel");
+        const panelOverlay = document.getElementById("panelOverlay");
+        const originalPanelParent = complaintsPanel.parentNode;
+        const originalPanelNextSibling = complaintsPanel.nextSibling;
 
         // Load Student Complaints
-
         async function loadStudentComplaints() {
 
             try {
@@ -354,7 +343,6 @@
                 const studentName =
                     localStorage.getItem("studentName");
 
-
                 if (!studentId) {
 
                     alert("Please login first!");
@@ -363,12 +351,9 @@
                         "login.html";
 
                     return;
-
                 }
 
-
                 // Dynamic Welcome Message
-
                 document.getElementById(
                     "welcomeMessage"
                 ).textContent =
@@ -376,29 +361,22 @@
                     (studentName || "Student") +
                     " 👋";
 
-
                 const response =
                     await fetch("/complaints");
-
 
                 const complaints =
                     await response.json();
 
-
                 // Only logged-in student's complaints
-
                 myComplaints =
                     complaints.filter(
                         complaint =>
                             complaint.studentId === studentId
                     );
 
-
                 // Calculate statistics
-
                 const total =
                     myComplaints.length;
-
 
                 const pending =
                     myComplaints.filter(
@@ -406,13 +384,11 @@
                             complaint.status === "Pending"
                     ).length;
 
-
                 const progress =
                     myComplaints.filter(
                         complaint =>
                             complaint.status === "In Progress"
                     ).length;
-
 
                 const resolved =
                     myComplaints.filter(
@@ -420,34 +396,22 @@
                             complaint.status === "Resolved"
                     ).length;
 
-
                 // Display statistics
-
                 document.getElementById(
                     "totalCount"
                 ).textContent = total;
-
 
                 document.getElementById(
                     "pendingCount"
                 ).textContent = pending;
 
-
                 document.getElementById(
                     "progressCount"
                 ).textContent = progress;
 
-
                 document.getElementById(
                     "resolvedCount"
                 ).textContent = resolved;
-
-
-                /*
-                    Complaints are NOT displayed automatically.
-                    Student must click My Complaints or a statistic card.
-                */
-
 
             } catch (error) {
 
@@ -457,47 +421,60 @@
                 );
 
             }
-
         }
 
-
         // Open Complaints Panel
-
         function openComplaintsPanel(status) {
 
-            document.getElementById(
-                "complaintsPanel"
-            ).style.display = "block";
+            /* Move panel + overlay directly under BODY.
+               This prevents .container/style.css from restricting fullscreen. */
+            document.body.appendChild(panelOverlay);
+            document.body.appendChild(complaintsPanel);
 
+            panelOverlay.style.display = "block";
+            complaintsPanel.style.display = "block";
 
-            document.getElementById(
-                "panelOverlay"
-            ).style.display = "block";
-
+            /* Stop the dashboard behind the panel from scrolling */
+            document.body.style.overflow = "hidden";
 
             showComplaints(status);
 
-        }
+            /* Always start complaint list at the top */
+            const scrollArea =
+                document.querySelector(".complaints-scroll-area");
 
+            if (scrollArea) {
+                scrollArea.scrollTop = 0;
+            }
+        }
 
         // Close Complaints Panel
-
         function closeComplaintsPanel() {
 
-            document.getElementById(
-                "complaintsPanel"
-            ).style.display = "none";
+            complaintsPanel.style.display = "none";
+            panelOverlay.style.display = "none";
 
+            document.body.style.overflow = "";
 
-            document.getElementById(
-                "panelOverlay"
-            ).style.display = "none";
+            /* Return both elements to their original positions */
+            if (originalPanelNextSibling) {
+                originalPanelParent.insertBefore(
+                    complaintsPanel,
+                    originalPanelNextSibling
+                );
+            } else {
+                originalPanelParent.appendChild(
+                    complaintsPanel
+                );
+            }
 
+            originalPanelParent.insertBefore(
+                panelOverlay,
+                complaintsPanel
+            );
         }
 
-
         // Display Complaints
-
         function displayComplaints(
             complaints,
             title
@@ -508,19 +485,15 @@
                     "complaintsList"
                 );
 
-
             const filterTitle =
                 document.getElementById(
                     "filterTitle"
                 );
 
-
             filterTitle.textContent =
                 title;
 
-
             list.innerHTML = "";
-
 
             if (complaints.length === 0) {
 
@@ -528,9 +501,7 @@
                     "<p>No complaints found.</p>";
 
                 return;
-
             }
-
 
             complaints.forEach(
                 complaint => {
@@ -540,79 +511,73 @@
                             "div"
                         );
 
-
                     card.className =
                         "complaint-card";
 
-card.innerHTML = `
+                    card.innerHTML = `
 
-    <h3>
-        ${complaint.title}
-    </h3>
+                        <h3>
+                            ${complaint.title}
+                        </h3>
 
-    <p>
-        <b>Complaint ID:</b>
-        <span class="complaint-id">
-            🆔 ${complaint.complaintId || "ID not available"}
-        </span>
-    </p>
+                        <p>
+                            <b>Complaint ID:</b>
+                            <span class="complaint-id">
+                                🆔 ${complaint.complaintId || "ID not available"}
+                            </span>
+                        </p>
 
-    <p>
-        <b>Category:</b>
-        ${complaint.category}
-    </p>
+                        <p>
+                            <b>Category:</b>
+                            ${complaint.category}
+                        </p>
 
-    <p>
-        <b>Location:</b>
-        ${complaint.location}
-    </p>
+                        <p>
+                            <b>Location:</b>
+                            ${complaint.location}
+                        </p>
 
-    <p>
-        <b>Submitted Date:</b>
-        ${complaint.createdAt
-            ? new Date(complaint.createdAt).toLocaleDateString("en-IN")
-            : "Date not available"}
-    </p>
+                        <p>
+                            <b>Submitted Date:</b>
+                            ${complaint.createdAt
+                                ? new Date(complaint.createdAt).toLocaleDateString("en-IN")
+                                : "Date not available"}
+                        </p>
 
-    <p class="priority">
-        <b>Priority:</b>
-        ${complaint.priority}
-    </p>
+                        <p class="priority">
+                            <b>Priority:</b>
+                            ${complaint.priority}
+                        </p>
 
-    <p class="status">
-        <b>Status:</b>
+                        <p class="status">
+                            <b>Status:</b>
 
-        <span class="status-badge ${
-            complaint.status === "Pending"
-                ? "status-pending"
-                : complaint.status === "In Progress"
-                    ? "status-progress"
-                    : "status-resolved"
-        }">
+                            <span class="status-badge ${
+                                complaint.status === "Pending"
+                                    ? "status-pending"
+                                    : complaint.status === "In Progress"
+                                        ? "status-progress"
+                                        : "status-resolved"
+                            }">
 
-            ● ${complaint.status}
+                                ● ${complaint.status}
 
-        </span>
+                            </span>
 
-    </p>
+                        </p>
 
-`;
-
+                    `;
 
                     list.appendChild(card);
 
                 }
             );
-
         }
 
-
         // Filter Complaints
-
         function showComplaints(status) {
 
             let filteredComplaints;
-
 
             if (status === "All") {
 
@@ -626,22 +591,25 @@ card.innerHTML = `
                         complaint =>
                             complaint.status === status
                     );
-
             }
-
 
             displayComplaints(
                 filteredComplaints,
                 status === "All"
-                    ? "My Complaints"
+                    ? "All Complaints"
                     : status + " Complaints"
             );
 
+            /* Reset complaint list scroll after filter change */
+            const scrollArea =
+                document.querySelector(".complaints-scroll-area");
+
+            if (scrollArea) {
+                scrollArea.scrollTop = 0;
+            }
         }
 
-
         // Load Dashboard
-
         loadStudentComplaints();
 
     </script>
